@@ -1,0 +1,19 @@
+{% extends 'main/pattern.html' %}
+
+{% block title %}Add new{% endblock %}
+
+{% block content %}
+    <div class="form">
+        <h2>Add some items:</h2>
+    
+        <form method="POST">
+            {% csrf_token %}
+    
+            <table>
+                {{form}}
+            </table>
+    
+            <input type="submit">
+        </form>
+    </div>
+{% endblock %}
