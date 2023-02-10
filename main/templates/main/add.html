@@ -6,13 +6,12 @@
     <div class="form">
         <h2>Add some items:</h2>
     
-        <form method="POST">
+        <form method="POST" novalidate>
             {% csrf_token %}
-    
             <table>
-                {{form}}
+                {{ form }}
             </table>
-    
+            <br>
             <input type="submit">
         </form>
     </div>

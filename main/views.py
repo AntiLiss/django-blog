@@ -14,8 +14,10 @@ def add(request):
         article_form = forms.AddNewForm(request.POST)
         if article_form.is_valid():
             article_form.save()
+            return render(request, template_name='main/add.html', context={'form': forms.AddNewForm})
         else:
-            return HttpResponse('Invalid data!')
-        return render(request, template_name='main/add.html', context={'form': forms.AddNewForm})
+            return render(request, template_name='main/add.html', context={'form': article_form})
     else:
-        return render(request, template_name='main/add.html', context={'form': forms.AddNewForm})
+        article_form = forms.AddNewForm()
+        return render(request, template_name='main/add.html', context={'form': article_form})
+    
