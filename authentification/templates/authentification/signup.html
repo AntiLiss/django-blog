@@ -6,22 +6,16 @@
 
 {% block content %}
     <div class="content">
-        <div class="data username">
-            <p>Username:</p>
-            <p>{{ form.username }}</p>
-        </div>
+        {% for field in form %}
+            <p>{{ field.label }}: {{ field }}</p>
+        {% endfor %}
+        <p>{{ form.errors }}</p>
 
-        <div class="data mail">
-            <p>Mail:</p>
-            <p>{{ form.mail }}</p>
-        </div>
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
 
-        <div class="data password">
-            <p>Password:</p>
-            <p>{{ form.password }}</p>
-        </div>
-        
-
+        <br>
         <button type="submit">Sign Up</button>
         <p class="other-way"><a href="{% url 'signin' %}">Log in</a></p>
     </div>
