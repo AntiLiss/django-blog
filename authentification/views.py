@@ -1,24 +1,43 @@
 from django.shortcuts import render, HttpResponse, redirect
-from .forms import CreateUserForm
+from .forms import CreateUserForm, AuthForm
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 
 
 # Create your views here.
 def signin(request):
     if request.method == 'POST':
-        userform = AuthenticationForm(data=request.POST)
+        userform = AuthForm(data=request.POST)
         if userform.is_valid():
-            username = userform.cleaned_data['username']
+            # username = userform.cleaned_data['username']
+            email = userform.cleaned_data['email']
             password = userform.cleaned_data['password']
             
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('news')
+            try:
+                # check is there user with such email
+                user = User.objects.get(email=email)
+                auth_user = authenticate(username=user.username, password=password)
+                
+                if auth_user is not None:
+                    login(request, auth_user)
+                    return redirect('news')
+                else:
+                    return render(request, template_name='authentification/signin.html', context={'form': userform})
+            except:
+                return render(request, template_name='authentification/signin.html', context={'form': userform})
+            
+            # auth_user = authenticate(username=user.username, email=email)
+            # if auth_user is not None:
+            #     login(request, auth_user)
+            #     return redirect('news')
+            # else:
+            #     return render(request, template_name='authentification/signin.html', context={'form': userform})  
+        else:
+            return render(request, template_name='authentification/signin.html', context={'form': userform})
     else:
-        userform = AuthenticationForm()
+        userform = AuthForm()
         return render(request, template_name='authentification/signin.html', context={'form': userform})
 
 
