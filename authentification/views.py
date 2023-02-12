@@ -24,8 +24,10 @@ def signin(request):
                     login(request, auth_user)
                     return redirect('news')
                 else:
+                    messages.error(request, 'Incorrect email or password!')
                     return render(request, template_name='authentification/signin.html', context={'form': userform})
             except:
+                messages.error(request, 'Incorrect email or password!')
                 return render(request, template_name='authentification/signin.html', context={'form': userform})
             
             # auth_user = authenticate(username=user.username, email=email)
@@ -46,7 +48,7 @@ def signup(request):
         userform = CreateUserForm(request.POST)
         if userform.is_valid():
             userform.save()
-            username = userform.cleaned_data['password1']
+            username = userform.cleaned_data['username']
             messages.success(request, f'Account created succesfully for {username}')
             return redirect('signin')
         else:

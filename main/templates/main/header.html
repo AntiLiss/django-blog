@@ -13,9 +13,13 @@
         <div class="container">
             <ul>
                 <li><a href="{% url 'news' %}">News</a></li>
-                <li><a href="{% url 'add' %}">Add</a></li>
+                <li><a href="{% url 'me' %}">Me</a></li>
                 <li><a href="#">Contacts</a></li>
             </ul>
+        </div>
+
+        <div class="user">
+            <p>Hello, {{ request.user.username }}!</p>
         </div>
     </header>
 </body>

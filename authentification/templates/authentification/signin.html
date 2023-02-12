@@ -7,8 +7,16 @@
 {% block content %}
     <div class="content">
         {% for field in form %}
-            <p>{{ field.label }}: {{ field }}</p>
+            <div class="field">
+                <p>{{ field.label }}:</p>
+                <p>{{ field }}</p>
+            </div>
         {% endfor %}
+
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+
         <p>{{ form.errors }}</p>        
 
         <button type="submit">Log in</button>

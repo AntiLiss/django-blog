@@ -30,7 +30,7 @@ main {
     margin-top: -70px;
 }
 
-.data {
+.field {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -38,7 +38,7 @@ main {
     margin-bottom: 20px;
 }
 
-.data p:first-child {
+.field p:first-child {
     margin-right: 30px;
 }
 
@@ -79,4 +79,13 @@ button:hover {
 .other-way a {
     text-decoration: none;
     color: rgb(0, 90, 226);
+}
+
+input {
+    border-radius: 6px;
+    padding: 5px 8px;
+}
+
+.mail_field {
+    background-color: antiquewhite;
 }

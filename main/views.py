@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse
 from . import forms, models
+from django.utils import timezone
 
 # Create your views here.
 def index(request):
@@ -9,15 +10,18 @@ def index(request):
     return render(request, template_name='main/news.html', context={'articles': articles})
 
 
-def add(request):
+def me(request):
     if request.method == 'POST':
         article_form = forms.AddNewForm(request.POST)
         if article_form.is_valid():
-            article_form.save()
-            return render(request, template_name='main/add.html', context={'form': forms.AddNewForm})
+            article = article_form.save(commit=False)
+            article.author_id = request.user.id
+            article.date = timezone.now()
+            article.save()
+            return render(request, template_name='main/me.html', context={'form': forms.AddNewForm})
         else:
-            return render(request, template_name='main/add.html', context={'form': article_form})
+            return render(request, template_name='main/me.html', context={'form': article_form})
     else:
         article_form = forms.AddNewForm()
-        return render(request, template_name='main/add.html', context={'form': article_form})
+        return render(request, template_name='main/me.html', context={'form': article_form})
     
