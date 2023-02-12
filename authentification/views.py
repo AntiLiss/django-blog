@@ -56,3 +56,8 @@ def signup(request):
     else:
         userform = CreateUserForm()
         return render(request, template_name='authentification/signup.html', context={'form': userform})
+ 
+     
+def signout(request):
+    logout(request)
+    return redirect('signin')

@@ -1,5 +1,7 @@
 {% extends 'main/pattern.html' %}
 
+{% load static %}
+
 {% block title %}News{% endblock %}
 
 {% block content %}
@@ -11,6 +13,11 @@
                 <div class="card">
                     <h3>#{{article.id}} {{article.title}}</h3>
                     <p>{{article.anounce}}</p>
+                    <br>
+                    <hr>
+                    <p>{{ article.author_id }}</p>
+                    <p>{{ article.date }}</p>
+                    <a href="{% url 'post_detail' article.id %}" id="get-details">Подробнее</a>
                 </div>
             {% endfor %}
         {% endif %}

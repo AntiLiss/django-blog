@@ -1,0 +1,19 @@
+{% extends 'main/pattern.html' %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="post-detail">
+            <h3>#{{object.id}} {{object.title}}</h3>
+            <br>
+            <p>{{object.anounce}}</p>
+            <br>
+            <p>{{object.text}}</p>
+            <br>
+            <hr>
+            <p>{{ object.author_id }}</p>
+            <p>{{ object.date }}</p>
+        </div>
+    </div>
+{% endblock %}

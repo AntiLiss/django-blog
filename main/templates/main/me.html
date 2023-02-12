@@ -5,7 +5,7 @@
 {% block content %}
     <div class="content">
         <div class="user-info">
-            <p id="fullname">{{ request.user.id}}</p>
+            <p id="fullname">id {{ request.user.id}}</p>
             <p id="username">{{ request.user.username }}</p>
             <p id="email">{{ request.user.email }}</p>
         </div>
@@ -15,7 +15,7 @@
         </div>
 
         <div class="add-form">
-            <form method="POST">
+            <form method="POST" novalidate>
                 {% csrf_token %}
 
                 {% for field in form %}
@@ -30,5 +30,16 @@
                 {{ form.errors }}
             </div>
         </div>
+
+        {% for article in articles %}
+            <div class="card">
+                <h3>#{{article.id}} {{article.title}}</h3>
+                <p>{{article.anounce}}</p>
+                <br>
+                <hr>
+                <p>{{ author.username }}</p>
+                <p>{{ article.date }}</p>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}

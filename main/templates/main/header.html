@@ -20,6 +20,7 @@
 
         <div class="user">
             <p>Hello, {{ request.user.username }}!</p>
+            <a href="{% url 'signout' %}" id="logout">Logout</a>
         </div>
     </header>
 </body>
