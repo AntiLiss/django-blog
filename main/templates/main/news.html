@@ -15,7 +15,7 @@
                     <p>{{article.anounce}}</p>
                     <br>
                     <hr>
-                    <p>{{ article.author_id }}</p>
+                    <p>{{ article.author.username }}</p>
                     <p>{{ article.date }}</p>
                     <a href="{% url 'post_detail' article.id %}" id="get-details">Подробнее</a>
                 </div>
