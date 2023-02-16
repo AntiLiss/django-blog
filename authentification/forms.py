@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 
 class CreateUserForm(UserCreationForm):  
     # remove password confirming
-    password2 = None  
+    # password2 = None  
+    
     # make email field as required
     email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'class': 'mail_field'})) 
     

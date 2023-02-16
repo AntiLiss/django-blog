@@ -3,6 +3,9 @@ from . import forms, models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.views.generic import DetailView, ListView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 # Create your views here.
 
@@ -10,20 +13,22 @@ from django.views.generic import DetailView, ListView
 #     articles = models.Article.objects.order_by('date').reverse()    
 #     return render(request, template_name='main/news.html', context={'articles': articles})
 
-class PostsListView(ListView):
+
+class PostListView(ListView):
     model = models.Article
-    ordering = ['author__username']
+    ordering = ['-date']
     # I also can use this raw query below instead two properties above
     # queryset = models.Article.objects.raw(raw_query='SELECT * FROM main_article INNER JOIN auth_user ON main_article.author_id = auth_user.id ORDER BY auth_user.username ASC')
     template_name = 'main/news.html'
     context_object_name = 'articles'
 
 
-class PostDetailView(DetailView):
+class PostDetailView(LoginRequiredMixin, DetailView):
     model = models.Article
     template_name = 'main/post_detail.html'
 
 
+@login_required
 def me(request):
     if request.method == 'POST':
         article_form = forms.AddNewForm(request.POST)

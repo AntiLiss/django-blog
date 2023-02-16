@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/5a484eabe9.js" crossorigin="anonymous"></script>
 </head>
 <body>
     {% include 'main/header.html' %}
@@ -15,5 +17,6 @@
         {% block content %}
         {% endblock %}
     </main>
+
 </body>
 </html>

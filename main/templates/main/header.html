@@ -10,17 +10,19 @@
 </head>
 <body>
     <header>
+        <span>
+            <i class="fa-solid fa-house"></i>
+            Home
+        </span>
+
         <div class="container">
-            <ul>
-                <li><a href="{% url 'news' %}">News</a></li>
-                <li><a href="{% url 'me' %}">Me</a></li>
-                <li><a href="#">Contacts</a></li>
-            </ul>
+            <div class="search_bar">Search</div>
+            <button class="add_post">Add</button>
         </div>
 
-        <div class="user">
-            <p>Hello, {{ request.user.username }}!</p>
-            <a href="{% url 'signout' %}" id="logout">Logout</a>
+        <div class="profile">
+            <p>My profile</p>
+            <div class="profile_image"></div>
         </div>
     </header>
 </body>

@@ -1,161 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
 * {
     padding: 0;
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Inter', sans-serif;
 }
 
 body {
-    background-color: rgb(231, 231, 231);
+    background-color: #F4F4F4;
 }
+
+/* header styles */
 
 header {
-    font-size: 18px;
-    background-color: rgb(174, 206, 228);
-    height: 80px;
     display: flex;
-    justify-content: center;
     align-items: center;
-}
-
-header a {
-    text-decoration: none;
-    color: black;
-}
-
-header ul {
-    list-style-type: none;
-    display: flex;
-    justify-content: center;
-}
-
-header ul li {
-    margin-right: 100px;
-}
-
-header ul li:last-child {
-    margin-right: 0px;
+    justify-content: space-between;
+    height: 80px;
+    background-color: white;
+    padding: 0 180px;
 }
 
 header .container {
-    width: 70%;
-}
-
-/* main {
-    background-color: rgb(231, 231, 231);
-    height: 100%;
-} */
-
-.content {
-    margin: 0 auto;
-    width: 40%;
-}
-
-.card {
-    background-color: white;
-    padding: 22px 30px;
-    border-radius: 10px;
-    /* margin-bottom: 20px; */
-}
-
-.card p {
-    font-size: 16px;
-    margin-top: 20px;
-}
-
-.card h3 {
-    font-size: 20px;
-}
-
-#no_article {
-    color: red;
-    text-align: center;
-}
-
-
-.user-info {
-    background-color: white;
-    border: 1px rgb(214, 214, 214) solid;
-    border-top: none;
-    border-radius: 0px 0px 20px 20px;
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 33%;
     display: flex;
-    justify-content: center;
     align-items: center;
-    flex-direction: column;
-    height: 200px;
+    justify-content: space-between;
+}
+
+header .search_bar {
+    box-sizing: border-box;
     font-size: 20px;
-}
-
-.user-info p {
-    margin-bottom: 5px;
-}
-
-.user-info p:last-child {
-    margin-bottom: 0px;
-}
-
-.add-post {
-    background-color: white;
-    border: 1px rgb(214, 214, 214) solid;
-    border-top: none;
-    border-radius: 10px;
+    width: 420px;
+    height: 46px;
+    background-color: #ECECEC;
+    color: #616161;
     display: flex;
-    justify-content: center;
     align-items: center;
-    height: 70px;
-    font-size: 20px;
-}
-
-.content div {
-    margin-bottom: 30px;
-}
-
-#add-post {
-    font-size: 16px;
-    padding: 10px 28px;
-    border: none;
-    background-color: rgb(0, 153, 255);
-    color: white;
+    padding: 0px 25px;
     border-radius: 12px;
-    transition: all ease 0.25s;
-    cursor: pointer;
 }
 
-#add-post:hover {
-    background-color: rgb(0, 107, 179);
+header button {
+    text-align: center;
+    border-radius: 12px;
+    font-size: 22px;
+    color: white;
+    background-color: black;
+    border: none;
+    width: 130px;
+    height: 46px;
 }
 
-.add-form {
-    background-color: white;
-    border: 1px rgb(214, 214, 214) solid;
-    border-radius: 10px;
-    min-height: 380px;
+header span {
+    font-size: 20px;
+}
+
+header span i {
+    margin-right: 5px;
+    font-size: 24px;
+}
+
+header .profile {
+    font-size: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-
-.add-form input {
-    margin-bottom: 10px;
-    padding: 5px 12px;
+header .profile_image {
+    border-radius: 100%;
+    background-color: rgb(9, 173, 146);
+    width: 50px;
+    height: 50px;
+    margin-left: 14px;
 }
 
-.add-form textarea {
-    padding: 5px 12px;
+/* -------------------- */
+
+
+/* index main styles */
+
+main .content {
+    width: 33%;
+    margin: 0 auto;
+    padding: 40px 0px;
 }
 
-.add-form button {
-    cursor: pointer;
-    margin-top: 10px;
-    padding: 8px 24px;
-}
-
-#logout {
-    color: rgb(255, 0, 0);
-}
-
-.post-detail {
-    height: 100vh;
-    background-color: white;
-    padding: 20px 50px;
+.post_block {
+    background-color: rgb(255, 255, 255);
+    height: 450px;
+    border-radius: 15px;
 }

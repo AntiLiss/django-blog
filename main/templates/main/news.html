@@ -6,7 +6,7 @@
 
 {% block content %}
     <div class="content">
-        {% if not articles %}
+        <!-- {% if not articles %}
             <h1 id="no_article">There are no articles :(</h1>
         {% else %}
             {% for article in articles %}
@@ -20,6 +20,10 @@
                     <a href="{% url 'post_detail' article.id %}" id="get-details">Подробнее</a>
                 </div>
             {% endfor %}
-        {% endif %}
+        {% endif %} -->
+
+        <div class="post_block">
+            
+        </div>
     </div>
 {% endblock %}
