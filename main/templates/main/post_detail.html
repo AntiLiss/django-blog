@@ -21,9 +21,11 @@
                 <p class="post_anounce">{{ article.anounce }}</p>
             </div>
 
-            <div class="post_image">
-                <img src="{% static 'main/images/man.jpg' %}" alt="">
-            </div>
+            {% if article.image %}
+                <div class="post_image">
+                    <img src="{% static article.image.url %}" alt="">
+                </div>
+            {% endif %}
 
             <div class="post_main_content">
                 <p>{{ article.text }}</p>

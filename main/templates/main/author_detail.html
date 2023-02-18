@@ -25,28 +25,41 @@
         </div>
     </div>
 
-    <div class="posts">
-        <div class="post_block">
-            <div class="post_content">
-                <div class="post_data">
-                    <span class="post_author">lookian101</span>
-                    <span class="post_date">17.02.2023</span>
+    <div class="posts author_posts">
+        {% for article in articles %}
+            <div class="post_block">
+                <div class="post_content">
+                    <div class="post_data">
+                        <span class="post_author">
+                            <a href="{% url 'author_detail' article.author.id %}">
+                                <i class="fa-solid fa-user"></i>{{ article.author.username }}
+                            </a>
+                        </span>
+                        <span class="post_date">{{ article.date }}</span>
+                    </div>
                 </div>
 
-                <h1>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo aliquam qui nulla labore asperiores dolor aut et delectus necessitatibus quos! dfdfdfdfdfdfdfdfdfdfdfdfdfdf</h1>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit beatae, quisquam soluta libero porro adipisci facere voluptates deleniti. Consectetur alias odit fugit animi laborum fuga enim, quas sapiente Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit beatae, quisquam soluta libero porro adipisci facere voluptates deleniti. Consectetur alias odit fugit animi laborum fuga enim, quas sapiente Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit beatae, quisquam soluta libero porro adipisci facere voluptates deleniti. Consectetur alias odit fugit animi laborum fuga enim, quas sapiente</p>
+                <a href="{% url 'post_detail' article.id %}" class="link_post_block">
+                    <div class="post_content">
+                        <h1>{{ article.title }}</h1>
+                        <p>{{ article.anounce }}</p>
+                    </div>
+        
+                    {% if article.image %}
+                        <div class="post_image">
+                            <img src="{% static article.image.url %}" alt="">
+                        </div>
+                    {% endif %}
+                </a>
+                
+                <div class="post_controls">
+                    <span class="like_btn">
+                        <i class="fa-regular fa-heart"></i>
+                    </span>
+                </div>
             </div>
-
-            <div class="post_image">
-                <img src="{% static 'main/images/google ai.jpg' %}" alt="">
-            </div>
-            
-            <div class="post_controls">
-                <span class="like_btn">
-                    <i class="fa-regular fa-heart"></i>
-                </span>
-            </div>
-        </div>
+        {% endfor %}
+        
     </div>
 </div>
 

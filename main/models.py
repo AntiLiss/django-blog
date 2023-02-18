@@ -9,4 +9,5 @@ class Article(models.Model):
     text = models.TextField(name='text')
     date = models.DateTimeField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ImageField(null=True, blank=True)
     

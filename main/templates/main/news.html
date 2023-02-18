@@ -44,9 +44,12 @@
                                 <p>{{ article.anounce }}</p>
                             </div>
                 
-                            <div class="post_image">
-                                <img src="{% static 'main/images/google ai.jpg' %}" alt="">
-                            </div>
+                            {% if article.image %}
+                                <!-- {{ article.image.url }} -->
+                                <div class="post_image">
+                                    <img src="{% static article.image.url %}" alt="">
+                                </div>
+                            {% endif %}
                         </a>
                         
                         <div class="post_controls">

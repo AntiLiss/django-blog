@@ -32,6 +32,12 @@ class AuthorDetailView(DetailView):
     model = User
     template_name = 'main/author_detail.html'
     context_object_name = 'author'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        this_user = models.User.objects.get(id=self.kwargs['pk'])
+        context['articles'] = models.Article.objects.filter(author=this_user)
+        return context
 
 
 @login_required
