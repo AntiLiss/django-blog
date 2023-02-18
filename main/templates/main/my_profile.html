@@ -1,0 +1,60 @@
+{% extends 'main/pattern.html' %}
+
+{% load static %}
+
+{% block title %}Me{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="my_profile">
+            <div class="my_info">
+                <div class="reg_date">
+                    <p>Зарегистрирован с {{ request.user.date_joined }}</p>
+                </div>
+
+                <div class="my_avatar">
+                    <img src="{% static 'main/images/man.jpg' %}" alt="Profile image">
+                </div>
+
+                <div class="naming">
+                    <p class="username">{{ request.user.username }}</p>
+                    <p class="full_name">{{ request.user.first_name }} {{ request.user.last_name }}</p>
+                    <p class="email">{{ request.user.email }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="add_post">
+            <button>
+                <i class="fa-regular fa-plus"></i>
+                Add post
+            </button>
+        </div>
+
+        <div class="my_posts">
+            {% for article in articles %}
+                <div class="post_block">
+                    <div class="post_content">
+                        <div class="post_data">
+                            <span class="post_author">{{ request.user.username }}</span>
+                            <span class="post_date">{{ article.date }}</span>
+                        </div>
+        
+                        <h1>{{ article.title }}</h1>
+                        <p>{{ article.anounce }}</p>
+                    </div>
+        
+                    <div class="post_image">
+                        <img src="{% static 'main/images/google ai.jpg' %}" alt="">
+                    </div>
+                    
+                    <div class="post_controls">
+                        <span class="like_btn">
+                            <i class="fa-regular fa-heart"></i>
+                        </span>
+                    </div>
+                </div>
+            {% endfor %}     
+        </div>
+    </div>
+{% endblock %}

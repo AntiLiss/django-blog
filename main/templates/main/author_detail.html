@@ -1,0 +1,53 @@
+{% extends 'main/pattern.html' %}
+
+{% load static %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+<div class="content">
+    <div class="profile">
+        <div class="info">
+            <div class="reg_date">
+                <p>Joined {{ author.date_joined }}</p>
+            </div>
+
+            <div class="avatar">
+                <img src="{% static 'main/images/amazon.jpg' %}" alt="Profile image">
+            </div>
+
+            <div class="naming">
+                <p class="username">@{{ author.username }}</p>
+                <p class="full_name">{{ author.first_name }} {{ author.last_name }}</p>
+                <p class="email">{{ author.email }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="posts">
+        <div class="post_block">
+            <div class="post_content">
+                <div class="post_data">
+                    <span class="post_author">lookian101</span>
+                    <span class="post_date">17.02.2023</span>
+                </div>
+
+                <h1>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Illo aliquam qui nulla labore asperiores dolor aut et delectus necessitatibus quos! dfdfdfdfdfdfdfdfdfdfdfdfdfdf</h1>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit beatae, quisquam soluta libero porro adipisci facere voluptates deleniti. Consectetur alias odit fugit animi laborum fuga enim, quas sapiente Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit beatae, quisquam soluta libero porro adipisci facere voluptates deleniti. Consectetur alias odit fugit animi laborum fuga enim, quas sapiente Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit beatae, quisquam soluta libero porro adipisci facere voluptates deleniti. Consectetur alias odit fugit animi laborum fuga enim, quas sapiente</p>
+            </div>
+
+            <div class="post_image">
+                <img src="{% static 'main/images/google ai.jpg' %}" alt="">
+            </div>
+            
+            <div class="post_controls">
+                <span class="like_btn">
+                    <i class="fa-regular fa-heart"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

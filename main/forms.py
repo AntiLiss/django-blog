@@ -2,7 +2,7 @@ from django import forms
 from .models import Article
 
 
-class AddNewForm(forms.ModelForm):  
+class ArticleForm(forms.ModelForm):  
     class Meta:
         model = Article
         fields = ['title', 'anounce', 'text']

@@ -21,9 +21,42 @@
                 </div>
             {% endfor %}
         {% endif %} -->
+        
+        {% if not articles %}
+            <h1>No articles yet :(</h1>
+        {% else %}
+                {% for article in articles %}
+                    <div class="post_block">
+                        <div class="post_content">
+                            <div class="post_data">
+                                <span class="post_author">
+                                    <a href="{% url 'author_detail' article.author.id %}">
+                                        <i class="fa-solid fa-user"></i>{{ article.author.username }}
+                                    </a>
+                                </span>
+                                <span class="post_date">{{ article.date }}</span>
+                            </div>
+                        </div>
 
-        <div class="post_block">
-            
-        </div>
+                        <a href="{% url 'post_detail' article.id %}" class="link_post_block">
+                            <div class="post_content">
+                                <h1>{{ article.title }}</h1>
+                                <p>{{ article.anounce }}</p>
+                            </div>
+                
+                            <div class="post_image">
+                                <img src="{% static 'main/images/google ai.jpg' %}" alt="">
+                            </div>
+                        </a>
+                        
+                        <div class="post_controls">
+                            <span class="like_btn">
+                                <i class="fa-regular fa-heart"></i>
+                            </span>
+                        </div>
+                    </div>
+                {% endfor %}
+        {% endif %}
+        
     </div>
 {% endblock %}

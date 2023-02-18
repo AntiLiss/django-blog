@@ -48,6 +48,7 @@ def signin(request):
 
 
 def signup(request):
+    # block the url if the user is authenticated
     if request.user.is_authenticated:
         return redirect('news')
     else:
@@ -57,7 +58,11 @@ def signup(request):
                 userform.save()
                 username = userform.cleaned_data['username']
                 messages.success(request, f'Account created succesfully for {username}')
-                return redirect('signup')
+                
+                # login if registered successfully 
+                auth_user = authenticate(username=username, password=userform.cleaned_data['password2'])
+                login(request, auth_user)
+                return redirect('news')
             else:
                 return render(request, template_name='authentification/signup.html', context={'form': userform})
         else:

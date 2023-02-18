@@ -1,19 +1,39 @@
 {% extends 'main/pattern.html' %}
 
+{% load static %}
+
 {% block title %}{% endblock %}
 
 {% block content %}
-    <div class="content">
-        <div class="post-detail">
-            <h3>#{{object.id}} {{object.title}}</h3>
-            <br>
-            <p>{{object.anounce}}</p>
-            <br>
-            <p>{{object.text}}</p>
-            <br>
-            <hr>
-            <p>{{ object.author.username }}</p>
-            <p>{{ object.date }}</p>
+    <div class="post_detail_content">
+        <div class="post_block">
+            <div class="post_content">
+                <div class="post_data">
+                    <span class="post_author">
+                        <a href="{% url 'author_detail' article.author.id %}">
+                            @{{ article.author.username }}
+                        </a>
+                    </span>
+                    <span class="post_date">{{ article.date }}</span>
+                </div>
+
+                <h1 class="post_heading">{{ article.title }}</h1>
+                <p class="post_anounce">{{ article.anounce }}</p>
+            </div>
+
+            <div class="post_image">
+                <img src="{% static 'main/images/man.jpg' %}" alt="">
+            </div>
+
+            <div class="post_main_content">
+                <p>{{ article.text }}</p>
+            </div>
+            
+            <div class="post_controls">
+                <span class="like_btn">
+                    <i class="fa-regular fa-heart"></i>
+                </span>
+            </div>
         </div>
     </div>
 {% endblock %}

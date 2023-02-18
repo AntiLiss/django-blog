@@ -11,18 +11,41 @@
 <body>
     <header>
         <span>
-            <i class="fa-solid fa-house"></i>
-            Home
+            <a href="{% url 'news' %}">
+                <i class="fa-solid fa-house"></i>
+                Home
+            </a>
         </span>
 
         <div class="container">
             <div class="search_bar">Search</div>
-            <button class="add_post">Add</button>
+            <button class="add_post">
+                <i class="fa-regular fa-plus"></i>
+                Add
+            </button>
         </div>
 
         <div class="profile">
-            <p>My profile</p>
-            <div class="profile_image"></div>
+            {% if request.user.username %}
+                <a href="{% url 'me' %}" class="my_profile_link">
+                    <div class="header_profile_info">
+                        <p>{{ request.user.username }}</p>
+                        <div class="profile_image"></div>
+                    </div>
+                </a>
+
+                <span>|</span>
+            
+                <a href="{% url 'signout' %}" class="header_profile_logout">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Log out</span>
+                </a> 
+            {% else %}
+                <a href="{% url 'signin' %}" class="header_profile_logout">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    <span>Sign in</span>
+                </a> 
+            {% endif %}       
         </div>
     </header>
 </body>
