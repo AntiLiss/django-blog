@@ -14,7 +14,7 @@
             </div>
 
             <div class="avatar">
-                <img src="{% static 'main/images/amazon.jpg' %}" alt="Profile image">
+                <img src="{{ author.profile.avatar.url }}" alt="Profile image">
             </div>
 
             <div class="naming">
@@ -44,14 +44,14 @@
                         <h1>{{ article.title }}</h1>
                         <p>{{ article.anounce }}</p>
                     </div>
-        
+
                     {% if article.image %}
                         <div class="post_image">
                             <img src="{% static article.image.url %}" alt="">
                         </div>
                     {% endif %}
                 </a>
-                
+
                 <div class="post_controls">
                     <span class="like_btn">
                         <i class="fa-regular fa-heart"></i>
@@ -59,7 +59,7 @@
                 </div>
             </div>
         {% endfor %}
-        
+
     </div>
 </div>
 

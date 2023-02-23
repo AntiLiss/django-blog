@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main',
+
+    'main.apps.MainConfig',
     'authentification',
 ]
 
@@ -120,12 +121,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# без этого списка картинки из MEDIA_URL почему-то не показываются, хотя остальное все показывается
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-    '/var/www/static/',
-]
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -135,7 +130,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/auth/'
 
-# media files
-# не совсем понял, как это работает. Потом нужно вникнуть
-MEDIA_URL = '/images/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images/')
+# Set folder to store user uploaded media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

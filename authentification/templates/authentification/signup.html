@@ -6,13 +6,22 @@
 
 {% block content %}
     <div class="content">
-        {% for field in form %}
+        {% for field in userform %}
             <div class="field">
                 <p>{{ field.label }}:</p>
                 <p>{{ field }}</p>
             </div>
         {% endfor %}
-        <p>{{ form.errors }}</p>
+
+        {% for field in profileform %}
+            <div class="field">
+                <p>{{ field.label }}:</p>
+                <p>{{ field }}</p>
+            </div>
+        {% endfor %}
+
+        <p>{{ userform.errors }}</p>
+        <p>{{ profileform.errors }}</p>
 
         {% for message in messages %}
             {{ message }}

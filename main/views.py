@@ -9,7 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
-# def index(request): 
+# def index(request):
 #     return render(request, template_name='main/profile_detail.html')
 
 
@@ -26,17 +26,18 @@ class PostDetailView(LoginRequiredMixin, DetailView):
     model = models.Article
     template_name = 'main/post_detail.html'
     context_object_name = 'article'
-    
-    
+
+
 class AuthorDetailView(DetailView):
     model = User
     template_name = 'main/author_detail.html'
     context_object_name = 'author'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # get all articles posted by this author
         this_user = models.User.objects.get(id=self.kwargs['pk'])
-        context['articles'] = models.Article.objects.filter(author=this_user)
+        context['articles'] = models.Article.objects.filter(author=this_user).order_by('-date')
         return context
 
 
@@ -51,10 +52,11 @@ def me(request):
             article.save()
             return redirect('me')
         else:
-            articles = models.Article.objects.filter(author=request.user).order_by('-date')       
+            articles = request.user.article_set.order_by('-date')
+            # You could also collect articles this way
+            # articles = models.Article.objects.filter(author=request.user).order_by('-date')
             return render(request, template_name='main/my_profile.html', context={'form': article_form, 'articles': articles})
     else:
         article_form = forms.ArticleForm()
-        articles = models.Article.objects.filter(author=request.user).order_by('-date')       
+        articles = models.Article.objects.filter(author=request.user).order_by('-date')
         return render(request, template_name='main/my_profile.html', context={'form': article_form, 'articles': articles})
-    

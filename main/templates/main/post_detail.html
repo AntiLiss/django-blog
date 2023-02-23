@@ -10,9 +10,15 @@
             <div class="post_content">
                 <div class="post_data">
                     <span class="post_author">
-                        <a href="{% url 'author_detail' article.author.id %}">
-                            @{{ article.author.username }}
-                        </a>
+                        {% if article.author.id == request.user.id %}
+                            <a href="{% url 'me' %}">
+                                @{{ article.author.username }}
+                            </a>
+                        {% else %}
+                            <a href="{% url 'author_detail' article.author.id %}">
+                                @{{ article.author.username }}
+                            </a>
+                        {% endif %}
                     </span>
                     <span class="post_date">{{ article.date }}</span>
                 </div>
@@ -23,14 +29,14 @@
 
             {% if article.image %}
                 <div class="post_image">
-                    <img src="{% static article.image.url %}" alt="">
+                    <img src="{{ article.image.url }}" alt="">
                 </div>
             {% endif %}
 
             <div class="post_main_content">
                 <p>{{ article.text }}</p>
             </div>
-            
+
             <div class="post_controls">
                 <span class="like_btn">
                     <i class="fa-regular fa-heart"></i>

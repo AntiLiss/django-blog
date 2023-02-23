@@ -11,9 +11,8 @@
                 <div class="reg_date">
                     <p>Зарегистрирован с {{ request.user.date_joined }}</p>
                 </div>
-
                 <div class="my_avatar">
-                    <img src="{% static 'main/images/man.jpg' %}" alt="Profile image">
+                    <img src="{{ request.user.profile.avatar.url }}" alt="Profile image">
                 </div>
 
                 <div class="naming">
@@ -39,22 +38,24 @@
                             <span class="post_author">{{ request.user.username }}</span>
                             <span class="post_date">{{ article.date }}</span>
                         </div>
-        
+
                         <h1>{{ article.title }}</h1>
                         <p>{{ article.anounce }}</p>
                     </div>
-        
-                    <div class="post_image">
-                        <img src="{% static 'main/images/google ai.jpg' %}" alt="">
-                    </div>
-                    
+
+                    {% if article.image %}
+                        <div class="post_image">
+                            <img src="{% static article.image.url %}" alt="">
+                        </div>
+                    {% endif %}
+
                     <div class="post_controls">
                         <span class="like_btn">
                             <i class="fa-regular fa-heart"></i>
                         </span>
                     </div>
                 </div>
-            {% endfor %}     
+            {% endfor %}
         </div>
     </div>
 {% endblock %}
