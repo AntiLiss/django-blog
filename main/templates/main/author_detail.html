@@ -1,66 +1,125 @@
 {% extends 'main/pattern.html' %}
 
-{% load static %}
-
 {% block title %}{% endblock %}
 
 {% block content %}
+    <div class="container-fluid px-md-0 py-2 mx-auto" style="max-width: 610px">
 
-<div class="content">
-    <div class="profile">
-        <div class="info">
-            <div class="reg_date">
-                <p>Joined {{ author.date_joined }}</p>
+        <!-- profile card -->
+        <div class="card">
+            <div class="card-body">
+                <!-- profile avatar -->
+                <div class="ratio ratio-1x1 rounded-circle border border-dark border-3 overflow-hidden mx-auto mb-3" style="width: 35%">
+                    <img src="{{ author.profile.avatar.url }}" class="object-fit-cover" alt="Raeesh">
+                </div>
+
+                <!-- profile username and edit btn -->
+                <div class="text-center mb-4">
+                    <h5 class="card-title mb-3 px-3">@{{ author.username }}</h5>
+                </div>
+
+                <!-- profile full info -->
+                <div class="profile-details bg-light border text-center text-sm-start rounded p-3">
+                    <div class="row mb-2">
+                        <span class="col-sm-3 fw-semibold">Full name</span>
+                        <span class="col-sm-9">
+                            {{ author.first_name }} {{ author.last_name }}
+                        </span>
+                    </div>
+
+                    <div class="row mb-2">
+                        <span class="col-sm-3 fw-semibold">Email</span>
+                        <span class="col-sm-9">{{ author.email }}</span>
+                    </div>
+
+                    <div class="row text-primary-emphasis">
+                        <span class="col-sm-3 fw-semibold">Registered</span>
+                        <span class="col-sm-9">{{ author.date_joined }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- tabs nav with my posts and likes -->
+        <ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
+            <li class="nav-item col-6" role="presentation">
+                <button class="nav-link active w-100" id="my-posts-tab" data-bs-toggle="tab" data-bs-target="#my-posts-tab-pane" type="button" role="tab" aria-controls="my-posts-tab-pane" aria-selected="true">Posts</button>
+            </li>
+
+            <li class="nav-item col-6" role="presentation">
+                <button class="nav-link w-100" id="liked-tab" data-bs-toggle="tab" data-bs-target="#liked-tab-pane" type="button" role="tab" aria-controls="liked-tab-pane" aria-selected="false">Likes</button>
+            </li>
+        </ul>
+
+        <!-- tabs content -->
+        <div class="tab-content" id="myTabContent">
+
+            <!-- my posts tab content -->
+            <div class="tab-pane fade show active" id="my-posts-tab-pane" role="tabpanel" aria-labelledby="posts-tab"
+                tabindex="0">
+
+                <!-- article card(s) -->
+                {% for article in articles %}
+                    <div class="card mb-4">
+                        <div class="card-header bg-white border-0 d-flex justify-content-between pt-3 px-md-5">
+                            <a href="#">
+                                <span class="author-username fw-bold d-flex align-items-center">
+                                    <i class="fa-solid fa-user me-2"></i>
+                                    {{ article.author.username }}
+                                </span>
+                            </a>
+                            <span class="posted-date fst-italic">{{ article.date }}</span>
+                        </div>
+
+                        <div class="card-body pt-1 px-md-5">
+                            <h3 class="card-title truncate">{{ article.title }}</h3>
+                            <p class="card-subtitle truncate">{{ article.anounce }}</p>
+                        </div>
+
+                        {% if article.image %}
+                            <img src="{{ article.image.url }}" class="card-img-center object-fit-contain bg-danger" alt="..." style="max-height: 342px;">
+                        {% endif %}
+
+                        <div class="card-footer bg-white d-flex justify-content-start align-items-center px-md-5">
+                            <span class="fs-5 me-2 text-secondary">
+                                <i class="fa-regular fa-heart"></i>
+                            </span>
+                            <span class="fw-bold text-secondary">15</span>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
 
-            <div class="avatar">
-                <img src="{{ author.profile.avatar.url }}" alt="Profile image">
-            </div>
+            <!-- liked posts tab content -->
+            <div class="tab-pane fade" id="liked-tab-pane" role="tabpanel" aria-labelledby="liked-tab" tabindex="0">
 
-            <div class="naming">
-                <p class="username">@{{ author.username }}</p>
-                <p class="full_name">{{ author.first_name }} {{ author.last_name }}</p>
-                <p class="email">{{ author.email }}</p>
+                <!-- article card(s) -->
+                <div class="card border-top-0 mb-4">
+                    <div class="card-header bg-white border-0 d-flex justify-content-between px-md-5">
+                        <a href="#">
+                            <span class="author-username fw-bold d-flex align-items-center">
+                                <i class="fa-solid fa-user me-2"></i>
+                                stan_lee
+                            </span>
+                        </a>
+                        <span class="posted-date fst-italic">17.08.2001</span>
+                    </div>
+
+                    <div class="card-body pt-1 px-md-5">
+                        <h3 class="card-title truncate">Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam nulla sed ex, id, deserunt, est dicta in obcae sdfsdfsdf</h3>
+                        <p class="card-subtitle truncate">Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam nulla sed ex, id, deserunt, est dicta in obcaecati ad consequatur nisi commodi minima eligendi aliquam sdf Lorem ipsum dolor sit amet consectetur adipisicin</p>
+                    </div>
+                    <img src="https://cdn.sortiraparis.com/images/80/62403/336773-la-tour-eiffel-un-incontournable-de-paris.jpg" class="card-img-center object-fit-contain bg-danger" alt="..." style="max-height: 342px;">
+
+                    <div class="card-footer bg-white d-flex justify-content-start align-items-center px-md-5">
+                        <span class="fs-5 me-2 text-secondary">
+                            <i class="fa-regular fa-heart"></i>
+                        </span>
+                        <span class="fw-bold text-secondary">15</span>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
-
-    <div class="posts author_posts">
-        {% for article in articles %}
-            <div class="post_block">
-                <div class="post_content">
-                    <div class="post_data">
-                        <span class="post_author">
-                            <a href="{% url 'author_detail' article.author.id %}">
-                                <i class="fa-solid fa-user"></i>{{ article.author.username }}
-                            </a>
-                        </span>
-                        <span class="post_date">{{ article.date }}</span>
-                    </div>
-                </div>
-
-                <a href="{% url 'post_detail' article.id %}" class="link_post_block">
-                    <div class="post_content">
-                        <h1>{{ article.title }}</h1>
-                        <p>{{ article.anounce }}</p>
-                    </div>
-
-                    {% if article.image %}
-                        <div class="post_image">
-                            <img src="{% static article.image.url %}" alt="">
-                        </div>
-                    {% endif %}
-                </a>
-
-                <div class="post_controls">
-                    <span class="like_btn">
-                        <i class="fa-regular fa-heart"></i>
-                    </span>
-                </div>
-            </div>
-        {% endfor %}
-
-    </div>
-</div>
-
 {% endblock %}

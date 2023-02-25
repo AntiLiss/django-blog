@@ -44,7 +44,7 @@ class AuthorDetailView(DetailView):
 @login_required
 def me(request):
     if request.method == 'POST':
-        article_form = forms.ArticleForm(request.POST)
+        article_form = forms.ArticleForm(request.POST, request.FILES)
         if article_form.is_valid():
             article = article_form.save(commit=False)
             article.author = request.user
@@ -59,4 +59,13 @@ def me(request):
     else:
         article_form = forms.ArticleForm()
         articles = models.Article.objects.filter(author=request.user).order_by('-date')
-        return render(request, template_name='main/my_profile.html', context={'form': article_form, 'articles': articles})
+        return render(request, template_name='main/my_profile.html', context={'article_form': article_form, 'articles': articles})
+
+
+@login_required
+def header_create_article(request):
+    if request.method == 'POST':
+        article_form = forms.ArticleForm(request.POST, request.FILES)
+        pass
+    else:
+        pass

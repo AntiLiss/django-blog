@@ -1,46 +1,38 @@
 {% extends 'main/pattern.html' %}
 
-{% load static %}
-
 {% block title %}{% endblock %}
 
 {% block content %}
-    <div class="post_detail_content">
-        <div class="post_block">
-            <div class="post_content">
-                <div class="post_data">
-                    <span class="post_author">
-                        {% if article.author.id == request.user.id %}
-                            <a href="{% url 'me' %}">
-                                @{{ article.author.username }}
-                            </a>
-                        {% else %}
-                            <a href="{% url 'author_detail' article.author.id %}">
-                                @{{ article.author.username }}
-                            </a>
-                        {% endif %}
+    <div class="container-fluid px-md-0 py-2 mx-auto" style="max-width: 610px">
+        <div class="card mb-4">
+            <div class="card-header bg-white border-0 d-flex justify-content-between pt-3 px-md-5">
+                <a href="#">
+                    <span class="author-username fw-bold d-flex align-items-center">
+                        <i class="fa-solid fa-user me-2"></i>
+                        {{ article.author.username }}
                     </span>
-                    <span class="post_date">{{ article.date }}</span>
-                </div>
+                </a>
+                <span class="posted-date fst-italic">{{ article.date }}</span>
+            </div>
 
-                <h1 class="post_heading">{{ article.title }}</h1>
-                <p class="post_anounce">{{ article.anounce }}</p>
+            <div class="card-body pt-1 px-md-5">
+                <h3 class="card-title ">{{ article.title }}</h3>
+                <p class="card-subtitle ">{{ article.anounce }}</p>
             </div>
 
             {% if article.image %}
-                <div class="post_image">
-                    <img src="{{ article.image.url }}" alt="">
-                </div>
+                <img src="{{ article.image.url }}" class="card-img-center object-fit-contain bg-danger" alt="..." style="max-height: 342px;">
             {% endif %}
 
-            <div class="post_main_content">
-                <p>{{ article.text }}</p>
+            <div class="card-body px-md-5">
+                <p class="card-text">{{ article.text }}</p>
             </div>
 
-            <div class="post_controls">
-                <span class="like_btn">
+            <div class="card-footer bg-white d-flex justify-content-start align-items-center px-md-5">
+                <span class="fs-5 me-2 text-secondary">
                     <i class="fa-regular fa-heart"></i>
                 </span>
+                <span class="fw-bold text-secondary">15</span>
             </div>
         </div>
     </div>

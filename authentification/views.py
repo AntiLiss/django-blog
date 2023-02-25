@@ -64,7 +64,6 @@ def signup(request):
                 # profile = profileform.save(commit=False)
                 # profile.user = user
 
-
                 username = user.username
                 messages.success(request, f'Account created succesfully for {username}')
                 # login if registered successfully

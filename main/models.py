@@ -12,9 +12,10 @@ class Profile(models.Model):
 
 # Simple article model
 class Article(models.Model):
-    title = models.CharField(max_length=50, name='title')
-    anounce = models.CharField(max_length=100)
+    title = models.CharField(max_length=120, name='title')
+    anounce = models.CharField(max_length=220)
     text = models.TextField(name='text')
+    image = models.ImageField(null=True, blank=True, upload_to='model_images/')
     date = models.DateTimeField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(null=True, blank=True, upload_to='model_images/')
+

@@ -1,52 +1,125 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'main/css/style.css' %}">
-</head>
-<body>
-    <header>
-        <span>
-            <a href="{% url 'news' %}">
-                <i class="fa-solid fa-house"></i>
-                Home
-            </a>
-        </span>
+<!-- pc screen nav -->
+<nav class="navbar  navbar-expand-md navbar-light bg-white">
+    <div class="container-lg">
+        <a href="{% url 'news' %}" class="navbar-brand">Blog</a>
 
-        <div class="container">
-            <div class="search_bar">Search</div>
-            <button class="add_post">
-                <i class="fa-regular fa-plus"></i>
-                Add
-            </button>
+        <div class="search-add d-none d-md-flex align-items-center">
+            <form action="" class="d-block">
+                <input type="search" class="form-control bg-light" placeholder="Search">
+            </form>
+
+            <!-- add post modal trigger -->
+            <div class="">
+                <button class="btn btn-outline-primary px-4 d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#headerArticleModal" type="button" >
+                    <i class="fa-regular fa-plus fs-6 me-2"></i>
+                    Add
+                </button>
+            </div>
+
         </div>
 
-        <div class="profile">
-            {% if request.user.username %}
-                <a href="{% url 'me' %}" class="my_profile_link">
-                    <div class="header_profile_info">
-                        <p>{{ request.user.username }}</p>
-                        <div class="profile_image"></div>
+        <!-- add post modal content -->
+        <div class="modal fade" id="headerArticleModal" tabindex="-1" aria-labelledby="headerArticleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">New post</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                </a>
+                    <div class="modal-body">
+                        <!-- add post form -->
+                        <form action="" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Title</label>
+                                {{ article_form.title }}
+                                <div class="form-text">Maximum 120 chars</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="anounce" class="form-label">Anounce</label>
+                                {{ article_form.anounce }}
+                                <div class="form-text">Maximum 220 chars</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="image" class="form-label">Image</label>
+                                {{ article_form.image }}
+                                <div class="form-text">Image for preview</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="text" class="form-label">Text</label>
+                                {{ article_form.text }}
+                            </div>
 
-                <span>|</span>
-            
-                <a href="{% url 'signout' %}" class="header_profile_logout">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    <span>Log out</span>
-                </a> 
-            {% else %}
-                <a href="{% url 'signin' %}" class="header_profile_logout">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                    <span>Sign in</span>
-                </a> 
-            {% endif %}       
+                            <!-- close modal and form submit btns -->
+                            <div class="text-end">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary ms-3">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-    </header>
-</body>
-</html>
+
+        <div>
+            <!-- mobile screen search btn -->
+            <span class="fs-4  d-md-none text-secondary" data-bs-toggle="mobile-search" aria-expanded="false">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
+
+            <!-- mobile-screen btn for profile dropdown -->
+            <span class="ms-4  d-md-none fs-4 text-secondary" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-user"></i>
+            </span>
+
+            <!-- profile dropdown trigger and menu -->
+            <div class="btn-group" role="button">
+                <div class="" alt="" data-bs-toggle="dropdown" aria-expanded="false">
+                    {% if request.user.is_authenticated %}
+                        <span class="fw-bold d-none d-xl-inline nav-item dropdown">{{ request.user.username }}</span>
+                        <img src="{{ request.user.profile.avatar.url }}" class="border border-dark rounded-circle object-fit-cover ms-3 d-none d-md-inline-block" alt="">
+                    {% else %}
+                        <span class="fw-bold d-none d-xl-inline nav-item dropdown">Guest</span>
+                        <img src="/media/profile_pics/default_avatar.jpg" class="border border-dark rounded-circle object-fit-cover ms-3 d-none d-md-inline-block" alt="">
+                    {% endif %}
+
+
+                </div>
+
+                <!-- dropdown menu -->
+                <ul class="dropdown-menu dropdown-menu-end mt-3 mt-md-2">
+                    {% if request.user.is_authenticated %}
+                        <li><a class="dropdown-item" href="{% url 'me' %}">My profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'signout' %}">Log out</a></li>
+                    {% else %}
+                        <li><a class="dropdown-item text-primary" href="{% url 'signin' %}">Sign in</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+<!-- mobile-screen nav panel -->
+<nav class="low-nav fixed-bottom navbar navbar-expand navbar-light bg-white d-md-none fs-4 border border-top py-1">
+    <div class="container-fluid d-block ">
+        <ul class="navbar-nav justify-content-around align-items-center">
+            <li class="nav-item">
+                <a href="{% url 'news' %}" class="nav-link"><i class="fa-solid fa-house"></i></a>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-outline-dark border-secondary px-3 py-1">
+                    <i class="fa-regular fa-plus"></i>
+                </button>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'me' %}">
+                    <img src="{{ request.user.profile.avatar.url }}" class="border border-dark rounded-circle object-fit-cover" alt="">
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
