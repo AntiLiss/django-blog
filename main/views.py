@@ -69,3 +69,39 @@ def header_create_article(request):
         pass
     else:
         pass
+
+
+# I should to add AJAX in this view
+def update_article(request, pk):
+    if request.method == 'POST':
+        # это на заметку, может, понадобится при обработке формы с хедера. а может, и нет.
+        # raw_form_data = {
+        #     # 'article_id': request.POST['article_id'],
+        #     'title': request.POST['title'],
+        #     'anounce': request.POST['anounce'],
+        #     'text': request.POST['text'],
+        # }
+
+        article_form = forms.ArticleForm(request.POST, request.FILES)
+        if article_form.is_valid():
+            title = article_form.cleaned_data['title']
+            anounce = article_form.cleaned_data['anounce']
+            image = article_form.cleaned_data['image']
+            text = article_form.cleaned_data['text']
+
+            article = models.Article.objects.get(id=pk)
+            article.title = title
+            article.anounce = anounce
+            article.image = image
+            article.text = text
+            article.date = timezone.now()
+            article.save()
+
+            # return redirect(request.get_full_path())
+            return redirect('me')
+        else:
+            return HttpResponse('<h1>Invalid form data</h1>')
+    else:
+        return HttpResponse('<h1>Not post</h1>')
+
+

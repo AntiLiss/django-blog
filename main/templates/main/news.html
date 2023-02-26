@@ -4,16 +4,117 @@
 
 {% block content %}
     <div class="container-fluid px-md-0 py-2 mx-auto" style="max-width: 610px">
+
+        <!-- render update_article modal if there are current user's articles -->
+        {% if request.user.article_set %}
+            <!-- update post modal -->
+            <div class="modal fade" id="updatePostModal" tabindex="-1" aria-labelledby="updatePostModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Edit post</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- add post form -->
+                            <form enctype="multipart/form-data" method="POST">
+                                {% csrf_token %}
+
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Title</label>
+                                    {{ article_form.title }}
+                                    <div class="form-text">Maximum 120 chars</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="anounce" class="form-label">Anounce</label>
+                                    {{ article_form.anounce }}
+                                    <div class="form-text">Maximum 220 chars</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="image" class="form-label">Image</label>
+                                    {{ article_form.image }}
+                                    <div class="form-text">Image for preview</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="text" class="form-label">Text</label>
+                                    {{ article_form.text }}
+                                </div>
+
+                                <!-- close modal and form submit btns -->
+                                <div class="text-end">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary ms-3">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
         {% for article in articles %}
             <div class="card mb-4">
                 <div class="card-header bg-white border-0 d-flex justify-content-between pt-3 px-md-5">
-                    <a href="{% url 'author_detail' article.author.id %}">
-                        <span class="author-username fw-bold d-flex align-items-center">
-                            <i class="fa-solid fa-user me-2"></i>
-                            {{ article.author.username }}
-                        </span>
-                    </a>
-                    <span class="posted-date fst-italic">{{ article.date }}</span>
+                    {% if article.author == request.user %}
+                        <a href="{% url 'me' %}">
+                            {% if article.author == request.user %}
+                                <span class="author-username fw-bold d-flex align-items-center text-primary">
+                                    <i class="fa-solid fa-user me-2"></i>
+                                    {{ article.author.username }}
+                                </span>
+                            {% else %}
+                                <span class="author-username fw-bold d-flex align-items-center">
+                                    <i class="fa-solid fa-user me-2"></i>
+                                    {{ article.author.username }}
+                                </span>
+                            {% endif %}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'author_detail' article.author.id %}">
+                            {% if article.author == request.user %}
+                                <span class="author-username fw-bold d-flex align-items-center text-primary">
+                                    <i class="fa-solid fa-user me-2"></i>
+                                    {{ article.author.username }}
+                                </span>
+                            {% else %}
+                                <span class="author-username fw-bold d-flex align-items-center">
+                                    <i class="fa-solid fa-user me-2"></i>
+                                    {{ article.author.username }}
+                                </span>
+                            {% endif %}
+                        </a>
+                    {% endif %}
+
+                    <!-- date and controls -->
+                    <div>
+                        <!-- date -->
+                        <span class="posted-date fst-italic">{{ article.date }}</span>
+
+                        {% if article.author == request.user %}
+                            <!-- controls -->
+                            <div class="btn-group ms-3">
+                                <span class="fs-4 text-primary rounded" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-ellipsis"></i>
+                                </span>
+
+                                <!-- dropdown menu -->
+                                <ul class="dropdown-menu dropdown-menu-start">
+                                    <li>
+                                        <!-- update modal trigger -->
+                                        <span class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#updatePostModal">Edit</span>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <!-- delete article btn -->
+                                        <span class="dropdown-item text-danger" role="button">Delete</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        {% endif %}
+                    </div>
+
                 </div>
 
                 <a href="{% url 'post_detail' article.id %}">
@@ -25,11 +126,11 @@
 
 
                 {% if article.image %}
-                    <img src="{{ article.image.url }}" class="card-img-center object-fit-contain bg-danger" alt="..." style="max-height: 342px;">
+                    <img src="{{ article.image.url }}" class="card-img-center object-fit-contain bg-danger" alt="" style="max-height: 342px;">
                 {% endif %}
 
                 <div class="card-footer bg-white d-flex justify-content-start align-items-center px-md-5">
-                    <span class="fs-5 me-2 text-secondary">
+                    <span class="fs-5 me-2 text-secondary" role="button">
                         <i class="fa-regular fa-heart"></i>
                     </span>
                     <span class="fw-bold text-secondary">15</span>
