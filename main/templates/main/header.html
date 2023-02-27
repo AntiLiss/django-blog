@@ -28,25 +28,26 @@
                     </div>
                     <div class="modal-body">
                         <!-- add post form -->
-                        <form action="" enctype="multipart/form-data">
+                        <form action="{% url 'add-article' %}" enctype="multipart/form-data" method="post" id="header-add-article" novalidate>
+                            {% csrf_token %}
                             <div class="mb-3">
                                 <label for="title" class="form-label">Title</label>
-                                {{ article_form.title }}
+                                <input type="text" name="title" id="title" value="{{ article.title }}" class="form-control" maxlength="120" required>
                                 <div class="form-text">Maximum 120 chars</div>
                             </div>
                             <div class="mb-3">
                                 <label for="anounce" class="form-label">Anounce</label>
-                                {{ article_form.anounce }}
+                                <input type="text" name="anounce" id="anounce" value="{{ article.anounce }}" class="form-control" maxlength="220" required>
                                 <div class="form-text">Maximum 220 chars</div>
                             </div>
                             <div class="mb-3">
                                 <label for="image" class="form-label">Image</label>
-                                {{ article_form.image }}
+                                <input type="file" accept="image/*" name="image" id="image" value="{{ article.image }}" class="form-control" maxlength="220">
                                 <div class="form-text">Image for preview</div>
                             </div>
                             <div class="mb-3">
                                 <label for="text" class="form-label">Text</label>
-                                {{ article_form.text }}
+                                <textarea class="form-control" name="text" id="text" cols="30" rows="10">{{ article.text }}</textarea>
                             </div>
 
                             <!-- close modal and form submit btns -->
@@ -111,7 +112,7 @@
                 <a href="{% url 'news' %}" class="nav-link"><i class="fa-solid fa-house"></i></a>
             </li>
             <li class="nav-item">
-                <button class="btn btn-outline-dark border-secondary px-3 py-1">
+                <button class="btn btn-outline-dark border-secondary px-3 py-1" type="button" data-bs-toggle="modal" data-bs-target="#headerArticleModal">
                     <i class="fa-regular fa-plus"></i>
                 </button>
             </li>

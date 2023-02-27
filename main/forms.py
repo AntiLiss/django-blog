@@ -6,6 +6,7 @@ class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = ['title', 'anounce', 'image', 'text']
+
         widgets = {
             'title': forms.TextInput(
                 attrs={'class': 'form-control', 'id': 'title'}
@@ -20,3 +21,4 @@ class ArticleForm(forms.ModelForm):
                 attrs={'class': 'form-control', 'cols': '30', 'rows': '10', 'id': 'text'}
             ),
         }
+

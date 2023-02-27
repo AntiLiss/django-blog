@@ -1,4 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
+from django.http import JsonResponse
 from . import forms, models
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -41,25 +42,31 @@ class AuthorDetailView(DetailView):
         return context
 
 
-@login_required
-def me(request):
-    if request.method == 'POST':
-        article_form = forms.ArticleForm(request.POST, request.FILES)
-        if article_form.is_valid():
-            article = article_form.save(commit=False)
-            article.author = request.user
-            article.date = timezone.now()
-            article.save()
-            return redirect('me')
-        else:
-            articles = request.user.article_set.order_by('-date')
-            # You could also collect articles this way
-            # articles = models.Article.objects.filter(author=request.user).order_by('-date')
-            return render(request, template_name='main/my_profile.html', context={'form': article_form, 'articles': articles})
-    else:
+# @login_required
+# def me(request):
+#     article_form = forms.ArticleForm()
+#     articles = request.user.article_set.order_by('-date')
+#     # I also could do it like this
+#     # articles = models.Article.objects.filter(author=request.user).order_by('-date')
+#     return render(request, template_name='main/my_profile.html', context={'article_form': article_form, 'articles': articles})
+
+
+# class based view version for url `me`
+class MyPostListView(LoginRequiredMixin, ListView):
+    template_name = 'main/my_profile.html'
+    # context_object_name = 'articles'
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = self.request.user.article_set.order_by('-date')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         article_form = forms.ArticleForm()
-        articles = models.Article.objects.filter(author=request.user).order_by('-date')
-        return render(request, template_name='main/my_profile.html', context={'article_form': article_form, 'articles': articles})
+        context['article_form'] = article_form
+        return context
+
 
 
 @login_required
@@ -71,17 +78,24 @@ def header_create_article(request):
         pass
 
 
+@login_required
+def add_article(request):
+    if request.method == 'POST':
+        article_form = forms.ArticleForm(request.POST, request.FILES)
+        if article_form.is_valid():
+            article = article_form.save(commit=False)
+            article.author = request.user
+            article.date = timezone.now()
+            article.save()
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'errors': article_form.errors})
+
+
 # I should to add AJAX in this view
+@login_required
 def update_article(request, pk):
     if request.method == 'POST':
-        # это на заметку, может, понадобится при обработке формы с хедера. а может, и нет.
-        # raw_form_data = {
-        #     # 'article_id': request.POST['article_id'],
-        #     'title': request.POST['title'],
-        #     'anounce': request.POST['anounce'],
-        #     'text': request.POST['text'],
-        # }
-
         article_form = forms.ArticleForm(request.POST, request.FILES)
         if article_form.is_valid():
             title = article_form.cleaned_data['title']
@@ -97,7 +111,6 @@ def update_article(request, pk):
             article.date = timezone.now()
             article.save()
 
-            # return redirect(request.get_full_path())
             return redirect('me')
         else:
             return HttpResponse('<h1>Invalid form data</h1>')

@@ -60,7 +60,7 @@
                 </div>
                 <div class="modal-body">
                     <!-- add post form -->
-                    <form enctype="multipart/form-data" method="POST">
+                    <form enctype="multipart/form-data" method="POST" id="add-article" action="{% url 'add-article' %}" novalidate>
                         {% csrf_token %}
 
                         <div class="mb-3">
@@ -119,7 +119,7 @@
             tabindex="0">
 
             <!-- article card(s) -->
-            {% for article in articles %}
+            {% for article in page_obj %}
             <div class="card mb-4">
                 <!-- update post modal -->
                 <div class="modal fade" id="updatePostModal{{ article.id }}" tabindex="-1" aria-labelledby="updatePostModalLabel{{ article.id }}" aria-hidden="true">
@@ -259,5 +259,162 @@
 
         </div>
     </div>
+
+    <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+        <ul class="pagination ">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a href="?page=1" class="page-link">&laquo; first</a>
+                </li>
+                <!-- <li class="page-item">
+                    <a href="?page={{ page_obj.previous_page_number }}" class="page-link">previous</a>
+                </li> -->
+            {% endif %}
+
+            {% for page in page_obj.paginator.page_range %}
+                {% if page_obj.number == page %}
+                    <li class="page-item active"><a class="page-link" href="#">{{ page }}</a></li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a href="?page={{ page_obj.next_page_number }}" class="page-link">next</a>
+                </li>
+                <!-- <li class="page-item">
+                    <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">last &raquo;</a>
+                </li> -->
+            {% endif %}
+        </ul>
+
+    </nav>
+
 </div>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // get form element
+            var form = $('#add-article');
+
+            // add event listener to form submit button
+            form.on('submit', function(event) {
+              event.preventDefault(); // prevent default form submission behavior
+
+              // serialize form data using jQuery's serialize method
+              var formData = new FormData(this)
+
+              // send AJAX request to server
+              $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function(xhr, settings) {
+                  xhr.setRequestHeader('X-CSRFToken', $('input[name="csrfmiddlewaretoken"]').val()); // include CSRF token in request headers
+                },
+                success: function(response) {
+                  handleResponse(response); // handle server response
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                  console.log(xhr.responseText);
+                }
+              });
+            });
+
+            function handleResponse(response) {
+                if (response.success) {
+                  // display success message to user
+                  form[0].reset(); // clear form fields
+                  $('#addPostModal').modal('hide');
+                } else if (response.errors) {
+                  // display validation errors to user
+                  var errors = response.errors;
+                  for (var field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                      var fieldErrors = errors[field];
+                      // display field errors to user
+                      var fieldInput = form.find('input[name="' + field + '"]');
+                      var fieldErrorList = fieldInput.next('.errorlist');
+                      if (fieldErrorList.length === 0) {
+                        fieldErrorList = $('<ul class="errorlist"></ul>').insertAfter(fieldInput);
+                      } else {
+                        fieldErrorList.empty();
+                      }
+                      for (var i = 0; i < fieldErrors.length; i++) {
+                        var error = fieldErrors[i];
+                        $('<li></li>').text(error).appendTo(fieldErrorList);
+                      }
+                    }
+                  }
+                }
+              }
+
+
+
+
+            // handling HEADER article adding form
+            var form = $('#header-add-article');
+
+            // add event listener to form submit button
+            form.on('submit', function(event) {
+              event.preventDefault(); // prevent default form submission behavior
+
+              // serialize form data using jQuery's serialize method
+              var formData = new FormData(this)
+
+              // send AJAX request to server
+              $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                beforeSend: function(xhr, settings) {
+                  xhr.setRequestHeader('X-CSRFToken', $('input[name="csrfmiddlewaretoken"]').val()); // include CSRF token in request headers
+                },
+                success: function(response) {
+                  handleResponse(response); // handle server response
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                  console.log(xhr.responseText);
+                }
+              });
+            });
+
+            function handleResponse(response) {
+                if (response.success) {
+                  // display success message to user
+                  form[0].reset(); // clear form fields
+                  $('#headerArticleModal').modal('hide');
+                } else if (response.errors) {
+                  // display validation errors to user
+                  var errors = response.errors;
+                  for (var field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                      var fieldErrors = errors[field];
+                      // display field errors to user
+                      var fieldInput = form.find('input[name="' + field + '"]');
+                      var fieldErrorList = fieldInput.next('.errorlist');
+                      if (fieldErrorList.length === 0) {
+                        fieldErrorList = $('<ul class="errorlist"></ul>').insertAfter(fieldInput);
+                      } else {
+                        fieldErrorList.empty();
+                      }
+                      for (var i = 0; i < fieldErrors.length; i++) {
+                        var error = fieldErrors[i];
+                        $('<li></li>').text(error).appendTo(fieldErrorList);
+                      }
+                    }
+                  }
+                }
+              }
+          });
+
+
+    </script>
 {% endblock %}
