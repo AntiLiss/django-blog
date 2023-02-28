@@ -88,7 +88,7 @@
                 <!-- date and controls -->
                 <div>
                     <!-- date -->
-                    <span class="posted-date fst-italic">{{ article.date }}</span>
+                    <span class="posted-date fst-italic">{{ article.date|date:'H:i d-m-Y' }}</span>
 
                     {% if article.author == request.user %}
                         <!-- controls -->
@@ -108,7 +108,7 @@
                                 </li>
                                 <li>
                                     <!-- delete article btn -->
-                                    <span class="dropdown-item text-danger" role="button">Delete</span>
+                                    <a href="{% url 'delete-article' article.id %}" class="dropdown-item text-danger" role="button">Delete</a>
                                 </li>
                             </ul>
                         </div>
@@ -116,13 +116,13 @@
                 </div>
             </div>
 
-            <div class="card-body pt-1 px-md-5">
+            <div class="card-body pb-0 pt-1 px-md-5">
                 <h3 class="card-title ">{{ article.title }}</h3>
                 <p class="card-subtitle ">{{ article.anounce }}</p>
             </div>
 
             {% if article.image %}
-                <img src="{{ article.image.url }}" class="card-img-center object-fit-contain bg-danger" alt="..." style="max-height: 342px;">
+                <img src="{{ article.image.url }}" class="card-img-center object-fit-contain bg-danger mt-2" alt="..." style="max-height: 342px;">
             {% endif %}
 
             <div class="card-body px-md-5">

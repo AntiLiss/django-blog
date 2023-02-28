@@ -54,7 +54,7 @@
 
         {% for article in articles %}
             <div class="card mb-4">
-                <div class="card-header bg-white border-0 d-flex justify-content-between pt-3 px-md-5">
+                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-3 px-md-5">
                     {% if article.author == request.user %}
                         <a href="{% url 'me' %}">
                             {% if article.author == request.user %}
@@ -88,7 +88,7 @@
                     <!-- date and controls -->
                     <div>
                         <!-- date -->
-                        <span class="posted-date fst-italic">{{ article.date }}</span>
+                        <span class="posted-date fst-italic">{{ article.date|date:'H:i d-m-Y' }}</span>
 
                         {% if article.author == request.user %}
                             <!-- controls -->
@@ -108,7 +108,7 @@
                                     </li>
                                     <li>
                                         <!-- delete article btn -->
-                                        <span class="dropdown-item text-danger" role="button">Delete</span>
+                                        <a href="{% url 'delete-article' article.id %}" class="dropdown-item text-danger" role="button">Delete</a>
                                     </li>
                                 </ul>
                             </div>
@@ -138,70 +138,4 @@
             </div>
         {% endfor %}
     </div>
-{% endblock %}
-
-
-{% block script %}
-    <script type="text/javascript">
-        $(document).ready(function() {
-            // handling HEADER article adding form
-            var form = $('#header-add-article');
-
-            // add event listener to form submit button
-            form.on('submit', function(event) {
-              event.preventDefault(); // prevent default form submission behavior
-
-              // serialize form data using jQuery's serialize method
-              var formData = new FormData(this)
-
-              // send AJAX request to server
-              $.ajax({
-                url: form.attr('action'),
-                type: form.attr('method'),
-                data: formData,
-                processData: false,
-                contentType: false,
-                beforeSend: function(xhr, settings) {
-                  xhr.setRequestHeader('X-CSRFToken', $('input[name="csrfmiddlewaretoken"]').val()); // include CSRF token in request headers
-                },
-                success: function(response) {
-                  handleResponse(response); // handle server response
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                  console.log(xhr.responseText);
-                }
-              });
-            });
-
-            function handleResponse(response) {
-                if (response.success) {
-                  // display success message to user
-                  form[0].reset(); // clear form fields
-                  $('#headerArticleModal').modal('hide');
-                } else if (response.errors) {
-                  // display validation errors to user
-                  var errors = response.errors;
-                  for (var field in errors) {
-                    if (errors.hasOwnProperty(field)) {
-                      var fieldErrors = errors[field];
-                      // display field errors to user
-                      var fieldInput = form.find('input[name="' + field + '"]');
-                      var fieldErrorList = fieldInput.next('.errorlist');
-                      if (fieldErrorList.length === 0) {
-                        fieldErrorList = $('<ul class="errorlist"></ul>').insertAfter(fieldInput);
-                      } else {
-                        fieldErrorList.empty();
-                      }
-                      for (var i = 0; i < fieldErrors.length; i++) {
-                        var error = fieldErrors[i];
-                        $('<li></li>').text(error).appendTo(fieldErrorList);
-                      }
-                    }
-                  }
-                }
-              }
-          });
-
-
-    </script>
 {% endblock %}

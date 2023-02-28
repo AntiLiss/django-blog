@@ -45,6 +45,13 @@ header .search-add input {
     transform: translateX(-50%) translateY(-50%);
 }
 
+#mobile-add-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
 /*truncate on news page*/
 .card .card-title.truncate {
     overflow: hidden;

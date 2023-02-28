@@ -61,14 +61,14 @@
                 <!-- article card(s) -->
                 {% for article in articles %}
                     <div class="card mb-4">
-                        <div class="card-header bg-white border-0 d-flex justify-content-between pt-3 px-md-5">
+                        <div class="card-header bg-white border-0 d-flex justify-content-between aling-items-center pt-3 px-md-5">
                             <a href="#">
                                 <span class="author-username fw-bold d-flex align-items-center">
                                     <i class="fa-solid fa-user me-2"></i>
                                     {{ article.author.username }}
                                 </span>
                             </a>
-                            <span class="posted-date fst-italic">{{ article.date }}</span>
+                            <span class="posted-date fst-italic">{{ article.date|date:'H:i d-m-Y' }}</span>
                         </div>
 
                         <div class="card-body pt-1 px-md-5">

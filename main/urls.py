@@ -8,6 +8,7 @@ urlpatterns = [
     path('<int:pk>', views.PostDetailView.as_view(), name='post_detail'),
     path('me', views.MyPostListView.as_view(), name='me'),
     path('authors/<int:pk>', views.AuthorDetailView.as_view(), name='author_detail'),
-    path('add-article', views.add_article, name='add-article'),
+    path('create-article', views.create_article, name='create-article'),
     path('update_article/<int:pk>', views.update_article, name='update_article'),
+    path('delete-article/<int:pk>', views.delete_article, name='delete-article')
 ]
