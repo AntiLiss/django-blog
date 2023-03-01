@@ -1,0 +1,127 @@
+<!-- Article block with truncated title and announce,
+To add to `news` and `my_profile` pages via jQuery -->
+
+<div class="card mb-4">
+    <!-- update post modal -->
+    <div class="modal fade" id="updatePostModal{{ article.id }}" tabindex="-1" aria-labelledby="updatePostModalLabel{{ article.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Edit post</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- add post form -->
+                    <form enctype="multipart/form-data" method="POST" action="{% url 'update_article' article.id %}">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            <input type="text" name="title" id="title" value="{{ article.title }}" class="form-control" maxlength="120" required>
+                            <div class="form-text">Maximum 120 chars</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="anounce" class="form-label">Anounce</label>
+                            <input type="text" name="anounce" id="anounce" value="{{ article.anounce }}" class="form-control" maxlength="220" required>
+                            <div class="form-text">Maximum 220 chars</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Image</label>
+                            <input type="file" accept="image/*" name="image" id="image" value="{{ article.image }}" class="form-control" maxlength="220">
+                            <div class="form-text">Image for preview</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="text" class="form-label">Text</label>
+                            <textarea class="form-control" name="text" id="text" cols="30" rows="10">{{ article.text }}</textarea>
+                        </div>
+
+                        <!-- close modal and form submit btns -->
+                        <div class="text-end">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary ms-3">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-3 px-md-5">
+        {% if article.author == request.user %}
+                <a href="{% url 'me' %}">
+                    {% if article.author == request.user %}
+                        <span class="author-username fw-bold d-flex align-items-center text-primary">
+                            <i class="fa-solid fa-user me-2"></i>
+                            {{ article.author.username }}
+                        </span>
+                    {% else %}
+                        <span class="author-username fw-bold d-flex align-items-center">
+                            <i class="fa-solid fa-user me-2"></i>
+                            {{ article.author.username }}
+                        </span>
+                    {% endif %}
+                </a>
+            {% else %}
+                <a href="{% url 'author_detail' article.author.id %}">
+                    {% if article.author == request.user %}
+                        <span class="author-username fw-bold d-flex align-items-center text-primary">
+                            <i class="fa-solid fa-user me-2"></i>
+                            {{ article.author.username }}
+                        </span>
+                    {% else %}
+                        <span class="author-username fw-bold d-flex align-items-center">
+                            <i class="fa-solid fa-user me-2"></i>
+                            {{ article.author.username }}
+                        </span>
+                    {% endif %}
+                </a>
+            {% endif %}
+
+        <!-- post date and controls -->
+        <div class="date-and-controls ">
+            <!-- date -->
+            <span class="posted-date fst-italic">{{ article.date|date:"H:i d-m-Y" }}</span>
+
+            <!-- controls -->
+            <div class="btn-group ms-3">
+                <span class="fs-4 text-primary rounded" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-ellipsis"></i>
+                </span>
+
+                <!-- dropdown menu -->
+                <ul class="dropdown-menu dropdown-menu-start">
+                    <li>
+                        <!-- update modal trigger -->
+                        <span class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#updatePostModal{{ article.id }}">Edit</span>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <!-- delete article btn -->
+                        <a href="{% url 'delete-article' article.id %}" class="dropdown-item text-danger" role="button">Delete</a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="card-body pt-1 px-md-5">
+        <h3 class="card-title truncate fw-semibold">{{ article.title }}</h3>
+        <p class="card-subtitle truncate">{{ article.anounce }}</p>
+    </div>
+
+    {% if article.image %}
+        <img src="{{ article.image.url }}" class="card-img-center object-fit-contain bg-danger" alt="..." style="max-height: 342px;">
+    {% endif %}
+
+    <div class="card-footer bg-white d-flex justify-content-start align-items-center px-md-5">
+        <span class="fs-5 me-2 text-secondary">
+            <i class="fa-regular fa-heart"></i>
+        </span>
+        <span class="fw-bold text-secondary">15</span>
+    </div>
+</div>

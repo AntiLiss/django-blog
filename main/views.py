@@ -23,7 +23,7 @@ class PostListView(ListView):
     context_object_name = 'articles'
 
 
-class PostDetailView(LoginRequiredMixin, DetailView):
+class PostDetailView(DetailView):
     model = models.Article
     template_name = 'main/post_detail.html'
     context_object_name = 'article'
@@ -75,7 +75,8 @@ def create_article(request):
             article = article_form.save(commit=False)
             article.author = request.user
             article.save()
-            return JsonResponse({'success': True})
+            article_block = render(request, 'main/article_block.html', context={'article': article}).content.decode('utf-8')
+            return JsonResponse({'success': True, 'article_block': article_block})
         else:
             return JsonResponse({'errors': article_form.errors})
 

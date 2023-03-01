@@ -167,12 +167,35 @@
 
 
                 <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-3 px-md-5">
-                    <a href="#">
-                        <span class="author-username fw-bold d-flex align-items-center">
-                            <i class="fa-solid fa-user me-2"></i>
-                            {{ article.author.username }}
-                        </span>
-                    </a>
+                    {% if article.author == request.user %}
+                            <a href="{% url 'me' %}">
+                                {% if article.author == request.user %}
+                                    <span class="author-username fw-bold d-flex align-items-center text-primary">
+                                        <i class="fa-solid fa-user me-2"></i>
+                                        {{ article.author.username }}
+                                    </span>
+                                {% else %}
+                                    <span class="author-username fw-bold d-flex align-items-center">
+                                        <i class="fa-solid fa-user me-2"></i>
+                                        {{ article.author.username }}
+                                    </span>
+                                {% endif %}
+                            </a>
+                        {% else %}
+                            <a href="{% url 'author_detail' article.author.id %}">
+                                {% if article.author == request.user %}
+                                    <span class="author-username fw-bold d-flex align-items-center text-primary">
+                                        <i class="fa-solid fa-user me-2"></i>
+                                        {{ article.author.username }}
+                                    </span>
+                                {% else %}
+                                    <span class="author-username fw-bold d-flex align-items-center">
+                                        <i class="fa-solid fa-user me-2"></i>
+                                        {{ article.author.username }}
+                                    </span>
+                                {% endif %}
+                            </a>
+                        {% endif %}
 
                     <!-- post date and controls -->
                     <div class="date-and-controls ">
@@ -206,7 +229,7 @@
                 </div>
 
                 <div class="card-body pt-1 px-md-5">
-                    <h3 class="card-title truncate">{{ article.title }}</h3>
+                    <h3 class="card-title truncate fw-semibold">{{ article.title }}</h3>
                     <p class="card-subtitle truncate">{{ article.anounce }}</p>
                 </div>
 
@@ -331,11 +354,7 @@
                   // display success message to user
                   form[0].reset(); // clear form fields
                   $('#addPostModal').modal('hide');
-
-
-                  // решил перезагружать страницу для отображения контента,
-                  // так как клонировать пост с новыми данными оказалось очень муторно
-                  location.reload();
+                  $('#my-posts-tab-pane').prepend(response.article_block);
 
                 } else if (response.errors) {
                   // display validation errors to user

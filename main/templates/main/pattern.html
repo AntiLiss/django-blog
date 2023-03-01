@@ -67,9 +67,10 @@
                   form[0].reset(); // clear form fields
                   $('#headerArticleModal').modal('hide');
 
-                  // решил перезагружать страницу для отображения контента,
-                  // так как клонировать пост с новыми данными оказалось очень муторно
-                  location.reload();
+                  // if we are on my_profile page we add article to corresponding block
+                  $('#my-posts-tab-pane').prepend(response.article_block);
+                  // if we are on news page we add article to corresponding block
+                  $('#news-articles-container').prepend(response.article_block);
 
                 } else if (response.errors) {
                   // display validation errors to user
