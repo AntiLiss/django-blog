@@ -82,7 +82,7 @@
                       var fieldInput = form.find('input[name="' + field + '"]');
                       var fieldErrorList = fieldInput.next('.errorlist');
                       if (fieldErrorList.length === 0) {
-                        fieldErrorList = $('<ul class="errorlist"></ul>').insertAfter(fieldInput);
+                        fieldErrorList = $('<ul class="errorlist text-danger"></ul>').insertAfter(fieldInput);
                       } else {
                         fieldErrorList.empty();
                       }

@@ -23,10 +23,6 @@
         <p>{{ userform.errors }}</p>
         <p>{{ profileform.errors }}</p>
 
-        {% for message in messages %}
-            {{ message }}
-        {% endfor %}
-
         <br>
         <button type="submit">Sign Up</button>
         <p class="other-way"><a href="{% url 'signin' %}">Log in</a></p>

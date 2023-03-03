@@ -1,9 +1,11 @@
 {% extends 'main/pattern.html' %}
 
-{% block title %}{% endblock %}
+{% block title %}My profile{% endblock %}
 
 {% block content %}
 <div class="container-fluid px-md-0 py-2 mx-auto" style="max-width: 610px">
+    <p id="success-message" class="fs-3 text-center fw-light text-white px-5 py-3 rounded shadow"
+        style="display: none;">Successfully!</p>
 
     <!-- profile card -->
     <div class="card">
@@ -16,27 +18,47 @@
 
             <!-- profile username and edit btn -->
             <div class="text-center mb-4">
-                <h5 class="card-title mb-3 px-3">@{{ request.user.username }}</h5>
-                <button class="btn btn-outline-dark px-5 ">Edit profile</button>
+                <h5 class="card-title mb-3 px-3" id="display-username">@{{ request.user.username }}</h5>
+
+                <!-- profile edit modal trigger -->
+                <button class="btn btn-outline-dark px-5 " type="button" data-bs-toggle="modal"
+                    data-bs-target="#profile-edit-modal">Edit profile</button>
             </div>
 
             <!-- profile full info -->
             <div class="profile-details bg-light border text-center text-sm-start rounded p-3">
                 <div class="row mb-2">
                     <span class="col-sm-3 fw-semibold">Full name</span>
-                    <span class="col-sm-9">
+                    <span class="col-sm-9" id="display-first-last-name">
                         {{ request.user.first_name }} {{ request.user.last_name }}
                     </span>
                 </div>
 
                 <div class="row mb-2">
                     <span class="col-sm-3 fw-semibold">Email</span>
-                    <span class="col-sm-9">{{ request.user.email }}</span>
+                    <span class="col-sm-9" id="display-email">{{ request.user.email }}</span>
                 </div>
 
                 <div class="row text-primary-emphasis">
                     <span class="col-sm-3 fw-semibold">Registered</span>
                     <span class="col-sm-9">{{ request.user.date_joined }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- edit profile modal -->
+        <div class="modal fade" id="profile-edit-modal" tabindex="-1" aria-labelledby="profile-edit-modal-label"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit profile</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- add post form -->
+                        {% include 'main/edit_profile_form.html' %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -60,7 +82,8 @@
                 </div>
                 <div class="modal-body">
                     <!-- add post form -->
-                    <form enctype="multipart/form-data" method="POST" id="add-article" action="{% url 'create-article' %}" novalidate>
+                    <form enctype="multipart/form-data" method="POST" id="add-article"
+                        action="{% url 'create-article' %}" novalidate>
                         {% csrf_token %}
 
                         <div class="mb-3">
@@ -120,130 +143,7 @@
 
             <!-- article card(s) -->
             {% for article in page_obj %}
-            <div class="card mb-4">
-                <!-- update post modal -->
-                <div class="modal fade" id="updatePostModal{{ article.id }}" tabindex="-1" aria-labelledby="updatePostModalLabel{{ article.id }}" aria-hidden="true">
-                    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit post</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <!-- add post form -->
-                                <form enctype="multipart/form-data" method="POST" action="{% url 'update_article' article.id %}">
-                                    {% csrf_token %}
-
-                                    <div class="mb-3">
-                                        <label for="title" class="form-label">Title</label>
-                                        <input type="text" name="title" id="title" value="{{ article.title }}" class="form-control" maxlength="120" required>
-                                        <div class="form-text">Maximum 120 chars</div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="anounce" class="form-label">Anounce</label>
-                                        <input type="text" name="anounce" id="anounce" value="{{ article.anounce }}" class="form-control" maxlength="220" required>
-                                        <div class="form-text">Maximum 220 chars</div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="image" class="form-label">Image</label>
-                                        <input type="file" accept="image/*" name="image" id="image" value="{{ article.image }}" class="form-control" maxlength="220">
-                                        <div class="form-text">Image for preview</div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="text" class="form-label">Text</label>
-                                        <textarea class="form-control" name="text" id="text" cols="30" rows="10">{{ article.text }}</textarea>
-                                    </div>
-
-                                    <!-- close modal and form submit btns -->
-                                    <div class="text-end">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary ms-3">Save</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center pt-3 px-md-5">
-                    {% if article.author == request.user %}
-                            <a href="{% url 'me' %}">
-                                {% if article.author == request.user %}
-                                    <span class="author-username fw-bold d-flex align-items-center text-primary">
-                                        <i class="fa-solid fa-user me-2"></i>
-                                        {{ article.author.username }}
-                                    </span>
-                                {% else %}
-                                    <span class="author-username fw-bold d-flex align-items-center">
-                                        <i class="fa-solid fa-user me-2"></i>
-                                        {{ article.author.username }}
-                                    </span>
-                                {% endif %}
-                            </a>
-                        {% else %}
-                            <a href="{% url 'author_detail' article.author.id %}">
-                                {% if article.author == request.user %}
-                                    <span class="author-username fw-bold d-flex align-items-center text-primary">
-                                        <i class="fa-solid fa-user me-2"></i>
-                                        {{ article.author.username }}
-                                    </span>
-                                {% else %}
-                                    <span class="author-username fw-bold d-flex align-items-center">
-                                        <i class="fa-solid fa-user me-2"></i>
-                                        {{ article.author.username }}
-                                    </span>
-                                {% endif %}
-                            </a>
-                        {% endif %}
-
-                    <!-- post date and controls -->
-                    <div class="date-and-controls ">
-                        <!-- date -->
-                        <span class="posted-date fst-italic">{{ article.date|date:"H:i d-m-Y" }}</span>
-
-                        <!-- controls -->
-                        <div class="btn-group ms-3">
-                            <span class="fs-4 text-primary rounded" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa-solid fa-ellipsis"></i>
-                            </span>
-
-                            <!-- dropdown menu -->
-                            <ul class="dropdown-menu dropdown-menu-start">
-                                <li>
-                                    <!-- update modal trigger -->
-                                    <span class="dropdown-item" type="button" data-bs-toggle="modal" data-bs-target="#updatePostModal{{ article.id }}">Edit</span>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <!-- delete article btn -->
-                                    <a href="{% url 'delete-article' article.id %}" class="dropdown-item text-danger" role="button">Delete</a>
-                                </li>
-                            </ul>
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="card-body pt-1 px-md-5">
-                    <h3 class="card-title truncate fw-semibold">{{ article.title }}</h3>
-                    <p class="card-subtitle truncate">{{ article.anounce }}</p>
-                </div>
-
-                {% if article.image %}
-                    <img src="{{ article.image.url }}" class="card-img-center object-fit-contain bg-danger" alt="..." style="max-height: 342px;">
-                {% endif %}
-
-                <div class="card-footer bg-white d-flex justify-content-start align-items-center px-md-5">
-                    <span class="fs-5 me-2 text-secondary">
-                        <i class="fa-regular fa-heart"></i>
-                    </span>
-                    <span class="fw-bold text-secondary">15</span>
-                </div>
-            </div>
+            {% include 'main/article_block.html' %}
             {% endfor %}
         </div>
 
@@ -283,103 +183,244 @@
         </div>
     </div>
 
+    {% if page_obj %}
     <nav aria-label="Page navigation example" class="d-flex justify-content-center">
         <ul class="pagination ">
             {% if page_obj.has_previous %}
-                <li class="page-item">
-                    <a href="?page=1" class="page-link">&laquo; first</a>
-                </li>
-                <!-- <li class="page-item">
-                    <a href="?page={{ page_obj.previous_page_number }}" class="page-link">previous</a>
-                </li> -->
+            <li class="page-item">
+                <a href="?page=1" class="page-link">&laquo; first</a>
+            </li>
             {% endif %}
 
             {% for page in page_obj.paginator.page_range %}
-                {% if page_obj.number == page %}
-                    <li class="page-item active"><a class="page-link" href="#">{{ page }}</a></li>
-                {% else %}
-                    <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
-                {% endif %}
+            {% if page_obj.number == page %}
+            <li class="page-item active"><a class="page-link" href="#">{{ page }}</a></li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+            {% endif %}
             {% endfor %}
 
             {% if page_obj.has_next %}
-                <li class="page-item">
-                    <a href="?page={{ page_obj.next_page_number }}" class="page-link">next</a>
-                </li>
-                <!-- <li class="page-item">
-                    <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">last &raquo;</a>
-                </li> -->
+            <li class="page-item">
+                <a href="?page={{ page_obj.next_page_number }}" class="page-link">next</a>
+            </li>
             {% endif %}
         </ul>
-
     </nav>
+    {% endif %}
+
 
 </div>
 {% endblock %}
 
 {% block script %}
-    <script type="text/javascript">
-        $(document).ready(function() {
-            // get form element
-            var form = $('#add-article');
+<script type="text/javascript">
+    function updateArticle(event, form) {
+        event.preventDefault();
+        var update_article_form = $(form);
+        console.log(update_article_form);
+        var formData = new FormData(form);
 
-            // add event listener to form submit button
-            form.on('submit', function(event) {
-              event.preventDefault(); // prevent default form submission behavior
+        $.ajax({
+            url: update_article_form.attr('action'),
+            type: update_article_form.attr('method'),
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader('X-CSRFToken', $('input[name="csrfmiddlewaretoken"]').val()); // include CSRF token in request headers
+            },
+            success: function (response) {
+                updateHandler(response); // handle server response
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.log(xhr.responseText);
+            }
+        });
 
-              // serialize form data using jQuery's serialize method
-              var formData = new FormData(this)
 
-              // send AJAX request to server
-              $.ajax({
+        function updateHandler(response) {
+            if (response.success) {
+                // display success message to user
+                update_article_form.parent().parent().parent().parent().modal('hide');
+                update_article_form.parent().parent().parent().parent().parent().remove();
+                $('#my-posts-tab-pane').prepend(response.article_block);
+
+            } else if (response.errors) {
+                // display validation errors to user
+                var errors = response.errors;
+                for (var field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        var fieldErrors = errors[field];
+                        // display field errors to user
+                        var fieldInput = update_article_form.find('input[name="' + field + '"]');
+                        var fieldErrorList = fieldInput.next('.errorlist');
+                        if (fieldErrorList.length === 0) {
+                            fieldErrorList = $('<ul class="errorlist text-danger"></ul>').insertAfter(fieldInput);
+                        } else {
+                            fieldErrorList.empty();
+                        }
+                        for (var i = 0; i < fieldErrors.length; i++) {
+                            var error = fieldErrors[i];
+                            $('<li></li>').text(error).appendTo(fieldErrorList);
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+
+    function updateProfile(event, form) {
+        // get form element
+        // add event listener to form submit button
+        event.preventDefault(); // prevent default form submission behavior
+
+        profileUpdateForm = $('#edit-profile');
+        // serialize form data using jQuery's serialize method
+        var formData = new FormData(form);
+
+        // send AJAX request to server
+        $.ajax({
+            url: $('#edit-profile').attr('action'),
+            type: $('#edit-profile').attr('method'),
+            data: formData,
+            processData: false,
+            contentType: false,
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader('X-CSRFToken', $('input[name="csrfmiddlewaretoken"]').val()); // include CSRF token in request headers
+            },
+            success: function (response) {
+                profileEdit(response); // handle server response
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.log(xhr.responseText);
+            }
+        });
+
+        function profileEdit(response) {
+            if (response.success) {
+                // display success message to user
+                $('#edit-profile')[0].reset(); // clear form fields
+                $('#profile-edit-modal').modal('hide');
+                $('#display-username').text('@' + response.username);
+                $('#display-first-last-name').text(response.first_name + ' ' + response.last_name);
+                $('#display-email').text(response.email);
+                $('#edit-profile').replaceWith(response.update_form);
+
+            } else if (response.errors) {
+                // display validation errors to user
+                var errors = response.errors;
+                for (var field in errors) {
+                    if (errors.hasOwnProperty(field)) {
+                        var fieldErrors = errors[field];
+                        // display field errors to user
+                        var fieldInput = $('#edit-profile').find('input[name="' + field + '"]');
+                        var fieldErrorList = fieldInput.next('.errorlist');
+                        if (fieldErrorList.length === 0) {
+                            fieldErrorList = $('<ul class="errorlist text-danger"></ul>').insertAfter(fieldInput);
+                        } else {
+                            fieldErrorList.empty();
+                        }
+                        for (var i = 0; i < fieldErrors.length; i++) {
+                            var error = fieldErrors[i];
+                            $('<li></li>').text(error).appendTo(fieldErrorList);
+                        }
+                    }
+                }
+
+                var errors_profile = response.errors_profile;
+                for (var field in errors_profile) {
+                    if (errors_profile.hasOwnProperty(field)) {
+                        var fieldErrors = errors_profile[field];
+                        // display field errors to user
+                        var fieldInput = $('#edit-profile').find('input[name="' + field + '"]');
+                        var fieldErrorList = fieldInput.next('.errorlist');
+                        if (fieldErrorList.length === 0) {
+                            fieldErrorList = $('<ul class="errorlist text-danger"></ul>').insertAfter(fieldInput);
+                        } else {
+                            fieldErrorList.empty();
+                        }
+                        for (var i = 0; i < fieldErrors.length; i++) {
+                            var error = fieldErrors[i];
+                            $('<li></li>').text(error).appendTo(fieldErrorList);
+                        }
+                    }
+                }
+            }
+        }
+    };
+
+
+    $(document).ready(function () {
+        // ARTICLE CREATION HANDLING
+        // get form element
+        var form = $('#add-article');
+
+        // add event listener to form submit button
+        form.on('submit', function (event) {
+            event.preventDefault(); // prevent default form submission behavior
+
+            // serialize form data using jQuery's serialize method
+            var formData = new FormData(this)
+
+            // send AJAX request to server
+            $.ajax({
                 url: form.attr('action'),
                 type: form.attr('method'),
                 data: formData,
                 processData: false,
                 contentType: false,
-                beforeSend: function(xhr, settings) {
-                  xhr.setRequestHeader('X-CSRFToken', $('input[name="csrfmiddlewaretoken"]').val()); // include CSRF token in request headers
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader('X-CSRFToken', $('input[name="csrfmiddlewaretoken"]').val()); // include CSRF token in request headers
                 },
-                success: function(response) {
-                  handleResponse(response); // handle server response
+                success: function (response) {
+                    handleResponse(response); // handle server response
                 },
-                error: function(xhr, textStatus, errorThrown) {
-                  console.log(xhr.responseText);
+                error: function (xhr, textStatus, errorThrown) {
+                    console.log(xhr.responseText);
                 }
-              });
             });
+        });
 
-            function handleResponse(response) {
-                if (response.success) {
-                  // display success message to user
-                  form[0].reset(); // clear form fields
-                  $('#addPostModal').modal('hide');
-                  $('#my-posts-tab-pane').prepend(response.article_block);
+        function handleResponse(response) {
+            if (response.success) {
+                // display success message to user
+                form[0].reset(); // clear form fields
+                $('#addPostModal').modal('hide');
+                $('#my-posts-tab-pane').prepend(response.article_block);
 
-                } else if (response.errors) {
-                  // display validation errors to user
-                  var errors = response.errors;
-                  for (var field in errors) {
+                $("#success-message").fadeIn(500);
+
+                // hide the success message with fade-out effect after 5 seconds
+                setTimeout(function () {
+                    $("#success-message").fadeOut(500);
+                }, 3000);
+
+            } else if (response.errors) {
+                // display validation errors to user
+                var errors = response.errors;
+                for (var field in errors) {
                     if (errors.hasOwnProperty(field)) {
-                      var fieldErrors = errors[field];
-                      // display field errors to user
-                      var fieldInput = form.find('input[name="' + field + '"]');
-                      var fieldErrorList = fieldInput.next('.errorlist');
-                      if (fieldErrorList.length === 0) {
-                        fieldErrorList = $('<ul class="errorlist"></ul>').insertAfter(fieldInput);
-                      } else {
-                        fieldErrorList.empty();
-                      }
-                      for (var i = 0; i < fieldErrors.length; i++) {
-                        var error = fieldErrors[i];
-                        $('<li></li>').text(error).appendTo(fieldErrorList);
-                      }
+                        var fieldErrors = errors[field];
+                        // display field errors to user
+                        var fieldInput = form.find('input[name="' + field + '"]');
+                        var fieldErrorList = fieldInput.next('.errorlist');
+                        if (fieldErrorList.length === 0) {
+                            fieldErrorList = $('<ul class="errorlist text-danger"></ul>').insertAfter(fieldInput);
+                        } else {
+                            fieldErrorList.empty();
+                        }
+                        for (var i = 0; i < fieldErrors.length; i++) {
+                            var error = fieldErrors[i];
+                            $('<li></li>').text(error).appendTo(fieldErrorList);
+                        }
                     }
-                  }
                 }
-              }
-          });
+            }
+        }
+    });
 
 
-    </script>
+</script>
 {% endblock %}

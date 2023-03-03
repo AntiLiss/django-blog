@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.http import JsonResponse
 from . import forms, models
+from authentification.forms import UserUpdateForm, ProfileCreationForm
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.views.generic import DetailView, ListView
@@ -27,6 +28,13 @@ class PostDetailView(DetailView):
     model = models.Article
     template_name = 'main/post_detail.html'
     context_object_name = 'article'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        this_article = models.Article.objects.get(id=self.kwargs['pk'])
+        context['article_form'] = forms.ArticleForm(instance=this_article)
+        return context
+
 
 
 class AuthorDetailView(DetailView):
@@ -64,6 +72,8 @@ class MyPostListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['article_form'] = forms.ArticleForm()
+        context['user_update_form'] = UserUpdateForm(instance=self.request.user)
+        context['profile_form'] = ProfileCreationForm()
         return context
 
 
@@ -88,12 +98,33 @@ def update_article(request, pk):
         article = models.Article.objects.get(id=pk)
         form = forms.ArticleForm(request.POST, request.FILES, instance=article)
         if form.is_valid():
-            form.save()
-            return redirect('me')
+            article = form.save()
+            article_block = render(request, 'main/article_block.html', context={'article': article}).content.decode('utf-8')
+            return JsonResponse({'success': True, 'article_block': article_block})
         else:
-            return HttpResponse('<h1>Not valid form data!</h1>')
+            return JsonResponse({'errors': form.errors})
     else:
         return HttpResponse('<h1>Not a POST method!</h1>')
+
+
+@login_required
+def update_article_big(request, pk):
+    if request.method == 'POST':
+        article = models.Article.objects.get(id=pk)
+        form = forms.ArticleForm(request.POST, request.FILES, instance=article)
+        if form.is_valid():
+            article = form.save()
+            article_block_detailed = render(request, 'main/article_block_detailed.html', context={
+                'article': article,
+                'article_form': forms.ArticleForm(instance=article)
+            }).content.decode('utf-8')
+
+            return JsonResponse({'success': True, 'article_block_detailed': article_block_detailed})
+        else:
+            return JsonResponse({'errors': form.errors})
+    else:
+        return HttpResponse('<h1>Not a POST method!</h1>')
+
 
 
 # Problem: if I delete DetailView entry then I get error: No such page

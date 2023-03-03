@@ -10,5 +10,6 @@ urlpatterns = [
     path('authors/<int:pk>', views.AuthorDetailView.as_view(), name='author_detail'),
     path('create-article', views.create_article, name='create-article'),
     path('update_article/<int:pk>', views.update_article, name='update_article'),
-    path('delete-article/<int:pk>', views.delete_article, name='delete-article')
+    path('update_article_big/<int:pk>', views.update_article_big, name='update_article_big'),
+    path('delete-article/<int:pk>', views.delete_article, name='delete-article'),
 ]

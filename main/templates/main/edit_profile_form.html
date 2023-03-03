@@ -1,0 +1,30 @@
+<form enctype="multipart/form-data" method="POST" id="edit-profile" action="{% url 'update-profile' %}" onsubmit="return updateProfile(event, this)" novalidate>
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label for="profile_username" class="form-label">Username</label>
+        {{ user_update_form.username }}
+    </div>
+    <div class="mb-3">
+        <label for="profile_first_name" class="form-label">First name</label>
+        {{ user_update_form.first_name }}
+    </div>
+    <div class="mb-3">
+        <label for="profile_last_name" class="form-label">Last name</label>
+        {{ user_update_form.last_name }}
+    </div>
+    <div class="mb-3">
+        <label for="profile_email" class="form-label">Email</label>
+        {{ user_update_form.email }}
+    </div>
+    <div class="mb-3">
+        <label for="profile_picture" class="form-label">Profile picture</label>
+        {{ profile_form.avatar }}
+    </div>
+
+    <!-- close modal and form submit btns -->
+    <div class="text-end">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary ms-3">Save</button>
+    </div>
+</form>
